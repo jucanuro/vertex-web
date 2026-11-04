@@ -1,6 +1,7 @@
 ---
 import Logo from '../brand/Logo.astro';
 import Button from '../ui/Button.astro';
+import ThemeToggle from '../ui/ThemeToggle.astro';
 import MegaMenuContent from './MegaMenuContent.astro';
 import MobileMenu from './MobileMenu.astro';
 import { navigation, type Locale } from '../../data/navigation';
@@ -39,7 +40,7 @@ const active = (href: string) => path.startsWith(href);
                   </svg>
                 </button>
                 <div id="mega-servicios" data-dropdown-panel class="dropdown-panel absolute inset-x-5 top-full pt-3 sm:inset-x-8">
-                  <div class="glass rounded-xl p-4 shadow-2xl" style="background:rgb(8 17 31 / 0.96)">
+                  <div class="glass panel rounded-xl p-4">
                     <MegaMenuContent />
                   </div>
                 </div>
@@ -61,12 +62,13 @@ const active = (href: string) => path.startsWith(href);
       </ul>
     </nav>
 
-    <div class="relative z-10 flex items-center gap-3">
+    <div class="relative z-10 flex items-center gap-1 sm:gap-3">
       <div class="hidden items-center gap-1 font-mono text-xs sm:flex" aria-label="Idioma">
         <span class="px-1.5 py-1 text-text" aria-current="true">ES</span>
         <span class="text-text-muted">/</span>
         <span class="cursor-not-allowed px-1.5 py-1 text-text-muted opacity-70" aria-disabled="true" title="Próximamente">EN</span>
       </div>
+      <ThemeToggle />
       <!-- Wrapper: los estilos con alcance de .btn (display) ganan a `hidden` de Tailwind si va en el propio Button -->
       <div class="hidden sm:block">
         <Button href={nav.cta.href} size="sm">{nav.cta.label}</Button>
@@ -98,7 +100,7 @@ const active = (href: string) => path.startsWith(href);
     inset: 0;
     z-index: -1;
     opacity: 0;
-    background: rgb(5 11 20 / 0.7);
+    background: var(--header-bg);
     -webkit-backdrop-filter: blur(16px);
     backdrop-filter: blur(16px);
     border-bottom: 1px solid var(--border);

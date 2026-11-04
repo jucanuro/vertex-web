@@ -2,21 +2,11 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Section from '../components/ui/Section.astro';
 import SectionHeading from '../components/ui/SectionHeading.astro';
-import Eyebrow from '../components/ui/Eyebrow.astro';
-import Button from '../components/ui/Button.astro';
 import GlassCard from '../components/ui/GlassCard.astro';
-import Badge from '../components/ui/Badge.astro';
-import ImagePlaceholder from '../components/ui/ImagePlaceholder.astro';
 import Reveal from '../components/ui/Reveal.astro';
-import Logo from '../components/brand/Logo.astro';
-import VerbChip from '../components/ui/VerbChip.astro';
+import ThemePanel from '../components/ui/ThemePanel.astro';
 import Hero from '../components/home/Hero.astro';
-import ServiceCard from '../components/services/ServiceCard.astro';
-import ClientLogo from '../components/clients/ClientLogo.astro';
-import MegaMenuContent from '../components/layout/MegaMenuContent.astro';
-import { services, verbs } from '../data/services';
 import { clients } from '../data/clients';
-import { company } from '../data/company';
 
 // SVG de ejemplo temporal: solo para probar el caso "con logo" en esta página
 const demoLogo =
@@ -25,217 +15,25 @@ const demoLogo =
     '<svg xmlns="http://www.w3.org/2000/svg" width="140" height="56" viewBox="0 0 140 56"><rect width="140" height="56" rx="10" fill="#4F8DF7"/><circle cx="28" cy="28" r="12" fill="#22D3EE"/><rect x="48" y="20" width="76" height="16" rx="4" fill="#E879F9"/></svg>',
   );
 const clientsDemo = clients.map((c, i) => (i < 4 ? { ...c, logo: demoLogo } : c));
-
-const palette = [
-  ['bg-950', 'Abismo', '#050B14'],
-  ['bg-900', 'Noche', '#0A1628'],
-  ['surface-800', 'Navy Vertex', '#0F2A45'],
-  ['brand-blue', 'Azul Vertex', '#1F5FB8'],
-  ['primary', 'Quantum Cyan', '#22D3EE'],
-  ['secondary', 'Vertex Teal', '#26BFA8'],
-  ['volt', 'Volt Green', '#5BF09A'],
-  ['accent', 'Electric Violet', '#8B5CF6'],
-  ['text', 'Texto', '#E6EDF7'],
-  ['text-muted', 'Texto atenuado', '#94A3B8'],
-] as const;
-
-const scale = [
-  ['display', 'text-display', 'font-display'],
-  ['h1', 'text-h1', 'font-display'],
-  ['h2', 'text-h2', 'font-display'],
-  ['h3', 'text-h3', 'font-display'],
-] as const;
 ---
 
 <BaseLayout title="Sistema de diseño" description="Fundaciones visuales del sitio de Vertex Quant Labs." noindex>
   <Section bg="aurora" class="pt-(--header-h)">
-    <SectionHeading as="h1" eyebrow="Sistema de diseño" title="Deep Navy + Quantum Glow" highlight="Quantum Glow" subtitle="Tokens, tipografía y componentes base. Página interna, no indexable." />
+    <SectionHeading as="h1" eyebrow="Sistema de diseño" title="Deep Navy + Quantum Glow" highlight="Quantum Glow" subtitle="Tokens, tipografía y componentes base en tema oscuro y claro. Página interna, no indexable." />
   </Section>
 
-  <Section id="colores">
-    <SectionHeading eyebrow="Tokens" title="Paleta" class="mb-10" />
-    <ul class="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4">
-      {
-        palette.map(([token, name, hex]) => (
-          <li class="overflow-hidden rounded-lg border border-(--border)">
-            <div class="h-16" style={`background:${hex}`}></div>
-            <div class="bg-bg-900 p-3">
-              <p class="text-sm font-semibold">{name}</p>
-              <p class="font-mono text-xs text-text-muted">{token} · {hex}</p>
-            </div>
-          </li>
-        ))
-      }
-    </ul>
-    <h3 class="text-h3 mt-14 mb-6">Acentos por servicio</h3>
-    <ul class="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-6">
-      {
-        services.map((sv) => (
-          <li class="rounded-lg border border-(--border) bg-bg-900 p-3">
-            <div class="mb-2 h-8 rounded-md" style={`background:${sv.accent}`}></div>
-            <p class="text-sm font-semibold">{sv.brand}</p>
-            <p class="font-mono text-xs text-text-muted">{sv.id} · {sv.accent}</p>
-          </li>
-        ))
-      }
-    </ul>
-    <h3 class="text-h3 mt-14 mb-6">Verbos</h3>
-    <ul class="grid grid-cols-2 gap-4 sm:grid-cols-4">
-      {
-        (['piensa', 'protege', 'escala'] as const).map((v) => (
-          <li class="rounded-lg border border-(--border) bg-bg-900 p-3">
-            <div class="mb-2 h-8 rounded-md" style={`background:${verbs[v].color}`}></div>
-            <p class="text-sm font-semibold">{verbs[v].label}</p>
-            <p class="font-mono text-xs text-text-muted">{v} · {verbs[v].color}</p>
-          </li>
-        ))
-      }
-    </ul>
-    <h3 class="text-h3 mt-14 mb-6">Gradientes</h3>
-    <div class="grid gap-4 sm:grid-cols-2">
-      <div>
-        <div class="h-24 rounded-xl" style="background:var(--gradient-brand)"></div>
-        <p class="mt-2 font-mono text-xs text-text-muted">Marca · 120deg #1F5FB8 → #22D3EE → #5BF09A</p>
-      </div>
-      <div>
-        <div class="h-24 rounded-xl" style="background:var(--gradient-ai)"></div>
-        <p class="mt-2 font-mono text-xs text-text-muted">IA · 120deg #22D3EE → #8B5CF6</p>
-      </div>
-      <div>
-        <div class="h-24 rounded-xl" style="background:var(--gradient-negocios)"></div>
-        <p class="mt-2 font-mono text-xs text-text-muted">gradient-negocios · 120deg #22D3EE → #5BF09A</p>
-      </div>
-      <div>
-        <div class="h-24 rounded-xl" style="background:var(--gradient-empresas)"></div>
-        <p class="mt-2 font-mono text-xs text-text-muted">gradient-empresas · 120deg #1F5FB8 → #8B5CF6</p>
-      </div>
+  <Section id="temas">
+    <SectionHeading eyebrow="Temas" title="Oscuro y claro, lado a lado" subtitle="Cada columna fuerza su tema con data-theme; el botón del header cambia el tema del resto de la página." class="mb-10" />
+    <div class="grid items-start gap-6 xl:grid-cols-2">
+      <ThemePanel theme="dark" clients={clientsDemo} />
+      <ThemePanel theme="light" clients={clientsDemo} />
     </div>
   </Section>
 
-  <Section bg="alt" id="tipografia">
-    <SectionHeading eyebrow="Tipografía" title="Escala fluida" class="mb-10" />
-    <div class="flex flex-col gap-8">
-      {
-        scale.map(([name, cls, font]) => (
-          <div>
-            <p class="mb-2 font-mono text-xs text-text-muted">{name} · Archivo 800</p>
-            <p class={`${cls} ${font} font-extrabold`} style="font-stretch:var(--heading-stretch);overflow-wrap:break-word">Vertex Quant Labs</p>
-          </div>
-        ))
-      }
-      <div>
-        <p class="mb-2 font-mono text-xs text-text-muted">body · Inter 400–600</p>
-        <p class="max-w-2xl">{company.philosophy}</p>
-      </div>
-      <div>
-        <p class="mb-2 font-mono text-xs text-text-muted">eyebrow / cifras · JetBrains Mono</p>
-        <Eyebrow>{company.name}</Eyebrow>
-        <p class="mt-3 font-mono text-3xl">0123456789</p>
-      </div>
-    </div>
-  </Section>
-
-  <Section id="botones">
-    <SectionHeading eyebrow="UI" title="Button" class="mb-10" />
-    <div class="flex flex-col gap-6">
-      {
-        (['primary', 'secondary', 'ghost'] as const).map((v) => (
-          <div class="flex flex-wrap items-center gap-4">
-            <span class="w-24 font-mono text-xs text-text-muted">{v}</span>
-            <Button variant={v} size="sm">Pequeño</Button>
-            <Button variant={v} size="md">Mediano</Button>
-            <Button variant={v} size="lg">Grande</Button>
-          </div>
-        ))
-      }
-      <div class="flex flex-wrap items-center gap-4">
-        <span class="w-24 font-mono text-xs text-text-muted">&lt;button&gt;</span>
-        <Button type="button">Botón nativo</Button>
-      </div>
-    </div>
-  </Section>
-
-  <Section bg="grid" id="tarjetas">
-    <SectionHeading eyebrow="UI" title="GlassCard y ServiceCard" subtitle="Una tarjeta por servicio. Chain aparece como Próximamente." class="mb-10" />
-    <ul class="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
-      {services.map((sv) => <ServiceCard as="li" service={sv} />)}
-    </ul>
-  </Section>
-
-  <Section bg="alt" id="verbchip">
-    <SectionHeading eyebrow="UI" title="VerbChip" class="mb-10" />
-    <div class="flex flex-wrap items-center gap-3">
-      <VerbChip verb="piensa" />
-      <VerbChip verb="protege" />
-      <VerbChip verb="escala" />
-    </div>
-  </Section>
-
-  <Section id="clientes">
-    <SectionHeading eyebrow="UI" title="ClientLogo" subtitle="Los cuatro primeros usan un SVG de ejemplo temporal (solo en esta página); el resto muestra el marcador provisional." class="mb-10" />
-    <ul class="grid grid-cols-2 justify-items-center gap-4 sm:grid-cols-3 lg:grid-cols-4">
-      {clientsDemo.map((c) => <li class="w-full"><ClientLogo client={c} class="mx-auto" /></li>)}
-    </ul>
-  </Section>
-
-  <Section bg="alt" id="megamenu">
-    <SectionHeading eyebrow="UI" title="Mega menú" subtitle="Muestra estática del panel de Servicios del header." class="mb-10" />
-    <div class="glass rounded-xl p-4" style="background:rgb(8 17 31 / 0.96)">
-      <MegaMenuContent />
-    </div>
-  </Section>
-
-  <Section id="componentes">
-    <SectionHeading eyebrow="UI" title="SectionHeading y Eyebrow" highlight="Eyebrow" subtitle="Título con fragmento resaltado y subtítulo opcional." class="mb-14" />
-    <div class="flex flex-wrap items-center gap-6">
-      <Eyebrow>Quantum Cyan</Eyebrow>
-      <Eyebrow color="var(--color-accent)">Electric Violet</Eyebrow>
-      <Eyebrow color="var(--color-chain)">Plasma Pink</Eyebrow>
-    </div>
-    <h3 class="text-h3 mt-14 mb-6">Badge</h3>
-    <div class="flex flex-wrap items-center gap-3">
-      <Badge>Default</Badge>
-      <Badge variant="soon" />
-      <Badge variant="tech">TypeScript</Badge>
-      <Badge variant="tech">Astro</Badge>
-    </div>
-  </Section>
-
-  <Section id="fondos">
-    <SectionHeading eyebrow="UI" title="Fondos de Section" class="mb-10" />
-    <div class="grid gap-4 sm:grid-cols-2">
-      {
-        (['none', 'grid', 'aurora', 'alt'] as const).map((bg) => (
-          <div class="overflow-hidden rounded-xl border border-(--border)">
-            <Section bg={bg}>
-              <p class="font-mono text-sm">bg="{bg}"</p>
-            </Section>
-          </div>
-        ))
-      }
-    </div>
-  </Section>
-
-  <Section bg="alt" id="placeholders">
-    <SectionHeading eyebrow="UI" title="ImagePlaceholder" class="mb-10" />
-    <div class="grid items-start gap-6 md:grid-cols-[2fr_1fr]">
-      <ImagePlaceholder ratio="16 / 9" label="Captura de Qhalisys" />
-      <ImagePlaceholder ratio="1 / 1" label="Foto del fundador" />
-    </div>
-  </Section>
-
-  <Section id="hero">
-    <SectionHeading eyebrow="Home" title="Hero" subtitle="Versión contenida (sin alto de pantalla completa) con las tres capas de fondo y los dos caminos de entrada." class="mb-10" />
+  <Section id="hero" bg="alt">
+    <SectionHeading eyebrow="Home" title="Hero" subtitle="Versión contenida (sin alto de pantalla completa) con las tres capas de fondo y los dos caminos de entrada. Sigue el tema activo." class="mb-10" />
     <div class="overflow-hidden rounded-xl border border-(--border)">
       <Hero as="h2" contained />
-    </div>
-  </Section>
-
-  <Section id="logo">
-    <SectionHeading eyebrow="Marca" title="Logo" class="mb-10" />
-    <div class="flex flex-wrap items-center gap-12">
-      <Logo class="text-2xl" />
-      <Logo variant="icon" class="text-3xl" />
     </div>
   </Section>
 

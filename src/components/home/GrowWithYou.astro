@@ -68,17 +68,17 @@ const last = stages.length - 1;
     border-radius: 9999px;
     font-family: var(--font-mono);
     font-size: 0.875rem;
-    color: var(--color-bg-950);
+    color: var(--c-bg);
     background: var(--gradient-brand);
-    box-shadow: 0 0 20px rgb(34 211 238 / 0.45);
+    box-shadow: var(--glow-node);
     transition:
       opacity 0.5s ease var(--d, 0s),
       box-shadow 0.5s ease var(--d, 0s);
   }
   .stage-next .node {
-    background: var(--color-bg-950);
-    color: var(--color-primary);
-    border: 2px dashed var(--color-primary);
+    background: var(--c-bg);
+    color: var(--c-primary);
+    border: 2px dashed var(--c-primary);
     box-shadow: none;
   }
   .label {
@@ -87,7 +87,7 @@ const last = stages.length - 1;
     transition: opacity 0.5s ease var(--d, 0s);
   }
   .stage-next .label {
-    color: var(--color-primary);
+    color: var(--c-primary);
   }
   /* Segmento hacia la siguiente etapa (vertical en móvil) */
   .seg {

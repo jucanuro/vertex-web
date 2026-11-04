@@ -1,6 +1,7 @@
 ---
 import Button from '../ui/Button.astro';
 import Badge from '../ui/Badge.astro';
+import ThemeToggle from '../ui/ThemeToggle.astro';
 import { navigation, megaColumns, type Locale } from '../../data/navigation';
 import { whatsappUrl } from '../../data/company';
 
@@ -118,10 +119,13 @@ const mega = nav.main.find((i) => i.kind === 'mega');
       <Button href={whatsappUrl} variant="secondary" size="lg" class="w-full" target="_blank" rel="noopener noreferrer">
         WhatsApp
       </Button>
-      <p class="text-center font-mono text-xs text-text-muted" aria-label="Idioma">
-        <span class="text-text" aria-current="true">ES</span> /
-        <span class="cursor-not-allowed opacity-70" aria-disabled="true" title="Próximamente">EN</span>
-      </p>
+      <div class="flex items-center justify-center gap-3">
+        <p class="text-center font-mono text-xs text-text-muted" aria-label="Idioma">
+          <span class="text-text" aria-current="true">ES</span> /
+          <span class="cursor-not-allowed opacity-70" aria-disabled="true" title="Próximamente">EN</span>
+        </p>
+        <ThemeToggle />
+      </div>
     </div>
   </div>
 </div>
@@ -138,7 +142,7 @@ const mega = nav.main.find((i) => i.kind === 'mega');
     overscroll-behavior: contain;
     padding: calc(var(--header-h) + env(safe-area-inset-top) + 1rem) calc(1.25rem + env(safe-area-inset-right))
       calc(1.5rem + env(safe-area-inset-bottom)) calc(1.25rem + env(safe-area-inset-left));
-    background: rgb(5 11 20 / 0.94);
+    background: var(--menu-bg);
     -webkit-backdrop-filter: blur(20px);
     backdrop-filter: blur(20px);
     opacity: 0;
@@ -167,11 +171,11 @@ const mega = nav.main.find((i) => i.kind === 'mega');
     }
   }
   .path-card[data-path='negocios'] {
-    color: #050b14;
+    color: var(--on-negocios);
     background: var(--gradient-negocios);
   }
   .path-card[data-path='empresas'] {
-    color: #fff;
+    color: var(--on-empresas);
     background: var(--gradient-empresas);
   }
   .chev {

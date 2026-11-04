@@ -20,6 +20,8 @@ const { title, description, image, noindex = false, lang = 'es', jsonLd } = Astr
 const fullTitle = `${title} | Vertex Quant Labs`;
 const canonical = new URL(Astro.url.pathname, Astro.site).href;
 const jsonLdList = jsonLd ? (Array.isArray(jsonLd) ? jsonLd : [jsonLd]) : [];
+// Mantener < 400 bytes
+const themeScript = '(()=>{let d=document.documentElement,t;try{t=localStorage.getItem("vql-theme")}catch(e){}t=t=="light"||t=="dark"?t:matchMedia("(prefers-color-scheme:light)").matches?"light":"dark";d.dataset.theme=t;document.querySelectorAll("meta[name=theme-color]").forEach(m=>m.content=t=="light"?"#F6F9FC":"#050B14")})()';
 const imageUrl = image ? new URL(image, Astro.site).href : undefined; // TODO: imagen OG por defecto
 ---
 
@@ -32,7 +34,11 @@ const imageUrl = image ? new URL(image, Astro.site).href : undefined; // TODO: i
     <meta name="description" content={description} />
     <link rel="canonical" href={canonical} />
     {(noindex || !allowIndexing) && <meta name="robots" content="noindex, nofollow" />}
-    <meta name="theme-color" content="#050B14" />
+    <meta name="color-scheme" content="dark light" />
+    <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#050B14" />
+    <meta name="theme-color" media="(prefers-color-scheme: light)" content="#F6F9FC" />
+    <!-- Tema sin parpadeo: antes de cualquier CSS. 1) localStorage "vql-theme"; 2) preferencia del sistema; 3) oscuro. -->
+    <script is:inline set:html={themeScript} />
 
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" />

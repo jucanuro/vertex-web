@@ -28,14 +28,14 @@ const paths = [
     href: '/negocios/',
     title: 'Tengo un negocio o emprendimiento',
     text: 'Sistemas listos para usar desde tu celular, con facturación electrónica.',
-    accent: '#22d3ee',
+    accent: 'var(--verb-escala)',
     gradient: 'var(--gradient-negocios)',
   },
   {
     href: '/empresas/',
     title: 'Represento una empresa o institución',
     text: 'Software a medida, datos e IA aplicada, con diagnóstico previo.',
-    accent: '#8b5cf6',
+    accent: 'var(--verb-piensa)',
     gradient: 'var(--gradient-empresas)',
   },
 ];
@@ -65,9 +65,9 @@ const paths = [
   >
     <defs>
       <linearGradient id="hero-v-grad" x1="0" y1="0" x2="1" y2="1">
-        <stop offset="0" stop-color="#1F5FB8"></stop>
-        <stop offset="0.5" stop-color="#22D3EE"></stop>
-        <stop offset="1" stop-color="#5BF09A"></stop>
+        <stop offset="0" style="stop-color:var(--vmark-0)"></stop>
+        <stop offset="0.5" style="stop-color:var(--vmark-1)"></stop>
+        <stop offset="1" style="stop-color:var(--vmark-2)"></stop>
       </linearGradient>
     </defs>
     <g stroke="url(#hero-v-grad)" stroke-width="1" stroke-linejoin="round" vector-effect="non-scaling-stroke">
@@ -89,7 +89,7 @@ const paths = [
       {
         parts.map((p) =>
           (verbOrder as string[]).includes(p) ? (
-            <span class="verb" style={`--c:var(--color-${p});--i:${verbOrder.indexOf(p as VerbKey)}`}>
+            <span class="verb" style={`--c:var(--verb-${p});--i:${verbOrder.indexOf(p as VerbKey)}`}>
               <span class="verb-ico">
                 <Icon svg={verbIcons[p as VerbKey]} class="size-full" />
               </span>
@@ -169,8 +169,8 @@ const paths = [
     aspect-ratio: 230 / 210;
     max-width: 150vw;
     transform: translate(-50%, -50%);
-    opacity: 0.08;
-    filter: drop-shadow(0 0 10px rgb(34 211 238 / 0.6));
+    opacity: var(--vmark-o);
+    filter: var(--vmark-filter);
     pointer-events: none;
   }
 
@@ -195,7 +195,7 @@ const paths = [
 
   .hero-veil {
     pointer-events: none;
-    background: radial-gradient(ellipse 62% 55% at 50% 46%, rgb(5 11 20 / 0.72), transparent 78%);
+    background: radial-gradient(ellipse 62% 55% at 50% 46%, var(--veil), transparent 78%);
   }
 
   @media (max-width: 479px) {
@@ -220,8 +220,9 @@ const paths = [
   /* Los verbos se ven encendidos desde el primer render (estado base).
      Solo se animan color y text-shadow: nunca opacity ni transform del h1. */
   .verb {
-    --glow: 0 0 0.4em color-mix(in srgb, var(--c) 50%, transparent);
-    --glow-strong: 0 0 0.45em color-mix(in srgb, var(--c) 85%, transparent);
+    /* --verb-glow-k: 1 en oscuro (resplandor); 0.3 en claro (solo un leve text-shadow de color) */
+    --glow: 0 0 0.4em color-mix(in srgb, var(--c) calc(50% * var(--verb-glow-k)), transparent);
+    --glow-strong: 0 0 0.45em color-mix(in srgb, var(--c) calc(85% * var(--verb-glow-k)), transparent);
     color: var(--c);
     text-shadow: var(--glow);
     white-space: nowrap;
@@ -239,7 +240,7 @@ const paths = [
   }
   @keyframes ignite {
     from {
-      color: var(--color-text);
+      color: var(--c-text);
       text-shadow: 0 0 0 transparent;
     }
     45% {
@@ -259,8 +260,8 @@ const paths = [
     8%,
     26% {
       text-shadow:
-        0 0 0.5em color-mix(in srgb, var(--c) 95%, transparent),
-        0 0 1.1em color-mix(in srgb, var(--c) 55%, transparent);
+        0 0 0.5em color-mix(in srgb, var(--c) calc(95% * var(--verb-glow-k)), transparent),
+        0 0 1.1em color-mix(in srgb, var(--c) calc(55% * var(--verb-glow-k)), transparent);
     }
   }
   @keyframes ico-cycle {
@@ -303,7 +304,7 @@ const paths = [
   }
   .path:hover,
   .path:focus-visible {
-    box-shadow: 0 0 44px color-mix(in srgb, var(--accent) 30%, transparent);
+    box-shadow: var(--glow-shape-lg) color-mix(in srgb, var(--accent) var(--glow-a-lg), transparent);
   }
   .path:hover::before,
   .path:focus-visible::before {
@@ -323,14 +324,14 @@ const paths = [
   }
 
   .wa-link {
-    color: var(--color-text-muted);
+    color: var(--c-text-muted);
     font-size: 0.95rem;
     transition: color 0.2s ease;
   }
   .wa-link span {
-    color: var(--color-text);
+    color: var(--c-text);
     text-decoration: underline;
-    text-decoration-color: rgb(148 163 184 / 0.5);
+    text-decoration-color: color-mix(in srgb, var(--c-text-muted) 50%, transparent);
     text-underline-offset: 4px;
   }
   .wa-link:hover span {
@@ -351,7 +352,7 @@ const paths = [
       width: 1.5rem;
       height: 2.4rem;
       margin-left: -0.75rem;
-      border: 1.5px solid rgb(148 163 184 / 0.5);
+      border: 1.5px solid color-mix(in srgb, var(--c-text-muted) 50%, transparent);
       border-radius: 9999px;
     }
     .scroll-cue span {
@@ -362,7 +363,7 @@ const paths = [
       height: 6px;
       margin-left: -1.5px;
       border-radius: 9999px;
-      background: var(--color-primary);
+      background: var(--c-primary);
       animation: cue 1.8s ease-in-out infinite;
     }
   }

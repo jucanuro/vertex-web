@@ -51,7 +51,8 @@ const icon = client.sector === 'Educación superior' ? icons.institution : icons
     width: 140px;
     height: 56px;
     object-fit: contain;
-    filter: grayscale(1);
+    /* Escala de grises; en oscuro, siluetas claras para que los logos negros se vean (--logo-filter) */
+    filter: var(--logo-filter);
     opacity: 0.75;
     transition:
       filter 0.25s ease,
@@ -64,7 +65,7 @@ const icon = client.sector === 'Educación superior' ? icons.institution : icons
   .client-name {
     font-size: 0.75rem;
     line-height: 1.25;
-    color: var(--color-text-muted);
+    color: var(--c-text-muted);
     display: -webkit-box;
     -webkit-line-clamp: 2;
     line-clamp: 2;

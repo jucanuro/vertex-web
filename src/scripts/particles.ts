@@ -10,9 +10,17 @@ const CAP = 90; // capacidad máxima de nodos (escritorio)
 const FPS_SLOW = 28; // ms por fotograma: promedio por encima = menos de ~35 fps
 const FPS_FRAMES = 60; // fotogramas medidos por etapa
 const FPS_WARMUP = 4; // fotogramas descartados al arrancar o reanudar
-// Violeta, esmeralda y cian (verbos) + blanco azulado del texto
-const RGB = ['139,92,246', '52,211,153', '34,211,238', '203,220,255'];
-const STROKE = RGB.map((c) => `rgb(${c})`);
+// Colores y opacidades salen de variables CSS (--pt-0..3 en "r, g, b", --pt-node-k, --pt-line-k):
+// se leen al iniciar y cuando cambia data-theme, sin recrear el canvas.
+let STROKE = ['', '', '', ''];
+let NODE_K = 1;
+let LINE_K = 1;
+function readTheme() {
+  const cs = getComputedStyle(document.documentElement);
+  STROKE = [0, 1, 2, 3].map((i) => `rgb(${cs.getPropertyValue(`--pt-${i}`).trim()})`);
+  NODE_K = parseFloat(cs.getPropertyValue('--pt-node-k')) || 1;
+  LINE_K = parseFloat(cs.getPropertyValue('--pt-line-k')) || 1;
+}
 
 /**
  * Decisión de autoprotección de FPS, fácil de inspeccionar sin console.log:
@@ -272,7 +280,7 @@ export function initParticles(hero: HTMLElement): () => void {
               deg[j]++;
               const a = 1 - Math.sqrt(d2) / LINK;
               const boost = Math.max(NEAR[i], NEAR[j]);
-              c.globalAlpha = Math.min(0.9, a * (0.22 + boost * 0.7 + w * 0.25)) * P.alpha;
+              c.globalAlpha = Math.min(0.9, a * (0.22 + boost * 0.7 + w * 0.25) * LINE_K) * P.alpha;
               if (style !== C[i]) c.strokeStyle = STROKE[(style = C[i])];
               c.beginPath();
               c.moveTo(PX[i], PY[i]);
@@ -287,7 +295,7 @@ export function initParticles(hero: HTMLElement): () => void {
     let style = -1;
     for (let i = 0; i < n; i++) {
       if (style !== C[i]) c.fillStyle = STROKE[(style = C[i])];
-      c.globalAlpha = Math.min(1, 0.4 + NEAR[i] * 0.55 + w * 0.2) * P.alpha;
+      c.globalAlpha = Math.min(1, (0.4 + NEAR[i] * 0.55 + w * 0.2) * NODE_K) * P.alpha;
       c.beginPath();
       c.arc(PX[i], PY[i], R[i] + NEAR[i] * 1.2, 0, 6.2832);
       c.fill();
@@ -415,6 +423,13 @@ export function initParticles(hero: HTMLElement): () => void {
     timer = window.setTimeout(resize, 300);
   };
 
+  readTheme();
+  const themeObs = new MutationObserver(() => {
+    readTheme();
+    if (!running) draw();
+  });
+  themeObs.observe(root, { attributes: true, attributeFilter: ['data-theme'] });
+
   const opt = { passive: true } as const;
   hero.addEventListener('pointerdown', onMove, opt);
   hero.addEventListener('pointermove', onMove, opt);
@@ -442,6 +457,7 @@ export function initParticles(hero: HTMLElement): () => void {
     clearTimeout(touchTimer);
     io.disconnect();
     ro.disconnect();
+    themeObs.disconnect();
     hero.removeEventListener('pointerdown', onMove);
     hero.removeEventListener('pointermove', onMove);
     hero.removeEventListener('pointerup', onUp);

@@ -45,7 +45,7 @@ const build = servicesById.build;
     {
       cols.map((verb) => (
         <div class="flex justify-center">
-          <span class="w-px" style={`background:linear-gradient(${verbs[verb].color},${verbs.base.color});box-shadow:0 0 10px ${verbs[verb].color}`} />
+          <span class="w-px" style={`background:linear-gradient(${verbs[verb].color},${verbs.base.color});box-shadow:0 0 var(--line-blur) ${verbs[verb].color}`} />
         </div>
       ))
     }
@@ -55,7 +55,7 @@ const build = servicesById.build;
     <GlassCard accent={build.accent} class="flex flex-col gap-5 sm:flex-row sm:items-center sm:gap-8" >
       <span
         class="flex size-14 shrink-0 items-center justify-center rounded-xl"
-        style={`color:${build.accent};background:color-mix(in srgb, ${build.accent} 14%, transparent);border:1px solid color-mix(in srgb, ${build.accent} 35%, transparent)`}
+        style={`color:${build.accent};background:color-mix(in srgb, ${build.accentBright} 14%, transparent);border:1px solid color-mix(in srgb, ${build.accentBright} 35%, transparent)`}
       >
         <Icon svg={build.icon} class="size-7" />
       </span>

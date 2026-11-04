@@ -30,14 +30,25 @@ const { uid, class: className, muted = false } = Astro.props;
   </defs>
   <path d="M15 45 L62 45 L102 145 L120 100 L143 100 L96 205 Z" fill={`url(#${uid}-v)`}></path>
   <path d="M212 26 L150 110 L179 110 L128 196 L203 94 L174 94 Z" fill={`url(#${uid}-b)`}></path>
-  <g fill="none" stroke="#E8F1FF" stroke-width="5" stroke-linecap="round" stroke-linejoin="round">
+  <g class="nl" fill="none" stroke-width="5" stroke-linecap="round" stroke-linejoin="round">
     <polyline points="32,112 68,80 98,116 132,70 150,48"></polyline>
     <line x1="98" y1="116" x2="98" y2="140"></line>
   </g>
-  <g fill="#0B1424" stroke="#E8F1FF" stroke-width="5">
+  <g class="nd" stroke-width="5">
     <circle cx="32" cy="112" r="8"></circle>
     <circle cx="68" cy="80" r="7"></circle>
     <circle cx="98" cy="116" r="8"></circle>
     <circle cx="150" cy="48" r="8"></circle>
   </g>
 </svg>
+
+<style>
+  /* Nodos del isotipo desde variables: oscuro (trazo claro, círculos oscuros) / claro (#0A2F63 y blanco) */
+  .nl {
+    stroke: var(--logo-node-stroke);
+  }
+  .nd {
+    fill: var(--logo-node-fill);
+    stroke: var(--logo-node-stroke);
+  }
+</style>

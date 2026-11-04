@@ -1,0 +1,199 @@
+---
+// Muestra de componentes con un tema forzado (data-theme en el contenedor). Solo para /design-system.
+import Eyebrow from './Eyebrow.astro';
+import Button from './Button.astro';
+import Badge from './Badge.astro';
+import VerbChip from './VerbChip.astro';
+import ImagePlaceholder from './ImagePlaceholder.astro';
+import Section from './Section.astro';
+import Logo from '../brand/Logo.astro';
+import ServiceCard from '../services/ServiceCard.astro';
+import ClientLogo from '../clients/ClientLogo.astro';
+import MegaMenuContent from '../layout/MegaMenuContent.astro';
+import { services, verbs } from '../../data/services';
+import type { Client } from '../../data/clients';
+
+interface Props {
+  theme: 'dark' | 'light';
+  clients: Client[];
+}
+const { theme, clients } = Astro.props;
+const dark = theme === 'dark';
+
+// [token CSS, nombre, hex oscuro, hex claro]: los hex son solo documentación; los swatches usan las variables
+const palette = [
+  ['--c-bg', 'bg (950)', '#050B14', '#F6F9FC'],
+  ['--c-bg-alt', 'bg-alt (900)', '#0A1628', '#EAF1F8'],
+  ['--c-surface', 'surface (800)', '#0F2A45', '#FFFFFF'],
+  ['--c-brand-blue', 'brand-blue', '#1F5FB8', '#1F5FB8'],
+  ['--c-primary', 'primary', '#22D3EE', '#0E7490'],
+  ['--c-primary-bright', 'primary-bright', '#22D3EE', '#22D3EE'],
+  ['--c-secondary', 'secondary', '#26BFA8', '#0F766E'],
+  ['--c-volt', 'volt', '#5BF09A', '#15803D'],
+  ['--c-accent', 'accent', '#8B5CF6', '#6D28D9'],
+  ['--c-text', 'text', '#E6EDF7', '#0B1B2E'],
+  ['--c-text-muted', 'text-muted', '#94A3B8', '#4A5B73'],
+] as const;
+const gradients = ['brand', 'ai', 'negocios', 'empresas'] as const;
+const sample = services.slice(0, 3);
+---
+
+<div data-theme={theme} class="theme-frame">
+  <header class="frame-head">
+    <Eyebrow>{dark ? 'Tema oscuro' : 'Tema claro'}</Eyebrow>
+    <p class="mt-2 font-mono text-xs text-text-muted">data-theme="{theme}"</p>
+  </header>
+
+  <div class="frame-block">
+    <h3 class="text-h3 mb-4">Paleta</h3>
+    <ul class="grid grid-cols-2 gap-3 sm:grid-cols-3">
+      {
+        palette.map(([v, name, hd, hl]) => (
+          <li class="overflow-hidden rounded-lg border border-(--border)">
+            <div class="h-12" style={`background:var(${v})`}></div>
+            <div class="bg-bg-900 p-2">
+              <p class="text-sm font-semibold">{name}</p>
+              <p class="font-mono text-[0.7rem] text-text-muted">{dark ? hd : hl}</p>
+            </div>
+          </li>
+        ))
+      }
+    </ul>
+    <h4 class="mt-8 mb-3 text-base">Acentos por servicio</h4>
+    <ul class="grid grid-cols-3 gap-3">
+      {
+        services.map((sv) => (
+          <li class="rounded-lg border border-(--border) bg-bg-900 p-2">
+            <div class="mb-2 flex h-8 overflow-hidden rounded-md">
+              <span class="flex-1" style={`background:${sv.accent}`}></span>
+              <span class="flex-1" style={`background:${sv.accentBright}`}></span>
+            </div>
+            <p class="text-sm font-semibold" style={`color:${sv.accent}`}>{sv.brand}</p>
+          </li>
+        ))
+      }
+    </ul>
+    <h4 class="mt-8 mb-3 text-base">Verbos</h4>
+    <ul class="grid grid-cols-3 gap-3">
+      {
+        (['piensa', 'protege', 'escala'] as const).map((v) => (
+          <li class="rounded-lg border border-(--border) bg-bg-900 p-2">
+            <div class="mb-2 h-8 rounded-md" style={`background:${verbs[v].color}`}></div>
+            <p class="text-sm font-semibold" style={`color:${verbs[v].color}`}>{verbs[v].label}</p>
+          </li>
+        ))
+      }
+    </ul>
+    <h4 class="mt-8 mb-3 text-base">Gradientes</h4>
+    <div class="grid grid-cols-2 gap-3">
+      {
+        gradients.map((g) => (
+          <div>
+            <div class="h-14 rounded-lg" style={`background:var(--gradient-${g})`}></div>
+            <p class="mt-1 font-mono text-[0.7rem] text-text-muted">gradient-{g}</p>
+          </div>
+        ))
+      }
+    </div>
+    <p class="text-gradient text-h3 mt-6 font-display font-extrabold">Texto con degradado</p>
+  </div>
+
+  <div class="frame-block">
+    <h3 class="text-h3 mb-4">Tipografía</h3>
+    <p class="text-h1 font-display font-extrabold" style="font-stretch:var(--heading-stretch);overflow-wrap:break-word">Vertex Quant Labs</p>
+    <p class="mt-3 max-w-xl">Cuerpo en Inter. <span class="text-text-muted">Texto atenuado para descripciones.</span></p>
+    <p class="mt-3 font-mono text-2xl">0123456789</p>
+  </div>
+
+  <div class="frame-block">
+    <h3 class="text-h3 mb-4">Botones</h3>
+    <div class="flex flex-wrap items-center gap-3">
+      <Button variant="primary">Primario</Button>
+      <Button variant="secondary">Secundario</Button>
+      <Button variant="ghost">Ghost</Button>
+    </div>
+  </div>
+
+  <div class="frame-block bg-grid">
+    <h3 class="text-h3 mb-4">Tarjetas</h3>
+    <ul class="grid gap-4 sm:grid-cols-2">
+      {sample.map((sv) => <ServiceCard as="li" service={sv} />)}
+    </ul>
+  </div>
+
+  <div class="frame-block">
+    <h3 class="text-h3 mb-4">Badges, chips y eyebrow</h3>
+    <div class="flex flex-wrap items-center gap-3">
+      <Badge>Default</Badge>
+      <Badge variant="soon" />
+      <Badge variant="tech">TypeScript</Badge>
+      <VerbChip verb="piensa" />
+      <VerbChip verb="protege" />
+      <VerbChip verb="escala" />
+    </div>
+    <div class="mt-4 flex flex-wrap items-center gap-6">
+      <Eyebrow>Quantum Cyan</Eyebrow>
+      <Eyebrow color="var(--c-accent)">Violet</Eyebrow>
+      <Eyebrow color="var(--accent-chain)">Pink</Eyebrow>
+    </div>
+  </div>
+
+  <div class="frame-block">
+    <h3 class="text-h3 mb-4">Clientes</h3>
+    <ul class="grid grid-cols-2 gap-3">
+      {clients.slice(0, 4).map((c) => <li><ClientLogo client={c} class="mx-auto" /></li>)}
+    </ul>
+  </div>
+
+  <div class="frame-block">
+    <h3 class="text-h3 mb-4">Mega menú</h3>
+    <div class="glass panel rounded-xl p-4">
+      <MegaMenuContent />
+    </div>
+  </div>
+
+  <div class="frame-block">
+    <h3 class="text-h3 mb-4">Fondos de Section</h3>
+    <div class="grid grid-cols-2 gap-3">
+      {
+        (['none', 'grid', 'aurora', 'alt'] as const).map((bg) => (
+          <div class="overflow-hidden rounded-xl border border-(--border)">
+            <Section bg={bg} class="demo-bg">
+              <p class="font-mono text-sm">bg="{bg}"</p>
+            </Section>
+          </div>
+        ))
+      }
+    </div>
+  </div>
+
+  <div class="frame-block">
+    <h3 class="text-h3 mb-4">Logo e ImagePlaceholder</h3>
+    <div class="flex flex-wrap items-center gap-8">
+      <Logo class="text-2xl" />
+      <Logo variant="icon" class="text-3xl" />
+    </div>
+    <ImagePlaceholder ratio="16 / 9" label="Captura de Qhalisys" class="mt-6" />
+  </div>
+</div>
+
+<style>
+  .theme-frame {
+    min-width: 0;
+    overflow: hidden;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-xl);
+    background: var(--c-bg);
+    color: var(--c-text);
+  }
+  .frame-head,
+  .frame-block {
+    padding: 1.5rem;
+  }
+  .frame-block {
+    border-top: 1px solid var(--border);
+  }
+  .theme-frame :global(.demo-bg > div) {
+    padding-block: 1.5rem !important;
+  }
+</style>

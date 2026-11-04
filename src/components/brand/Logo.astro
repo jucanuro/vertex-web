@@ -41,7 +41,8 @@ const uid = `lg-${Math.random().toString(36).slice(2, 8)}`;
     font-stretch: 125%;
     font-size: 1.25em;
     letter-spacing: 0.02em;
-    background: linear-gradient(90deg, #fff, #bff5dc);
+    /* --logo-text: fondo del texto (degradado claro en oscuro, azul sólido en claro) */
+    background: var(--logo-text);
     -webkit-background-clip: text;
     background-clip: text;
     color: transparent;
@@ -51,6 +52,6 @@ const uid = `lg-${Math.random().toString(36).slice(2, 8)}`;
     font-weight: 600;
     font-size: 0.5em;
     letter-spacing: 0.34em;
-    color: #cfe3ff;
+    color: var(--logo-text-2);
   }
 </style>

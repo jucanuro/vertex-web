@@ -3,7 +3,7 @@ interface Props {
   color?: string;
   class?: string;
 }
-const { color = 'var(--color-primary)', class: className } = Astro.props;
+const { color = 'var(--c-primary)', class: className } = Astro.props;
 ---
 
 <p class:list={['eyebrow', className]} style={`--dot:${color}`}>
@@ -21,13 +21,13 @@ const { color = 'var(--color-primary)', class: className } = Astro.props;
     line-height: 1;
     letter-spacing: 0.18em;
     text-transform: uppercase;
-    color: var(--color-text-muted);
+    color: var(--c-text-muted);
   }
   .dot {
     width: 6px;
     height: 6px;
     border-radius: 9999px;
     background: var(--dot);
-    box-shadow: 0 0 8px var(--dot);
+    box-shadow: 0 0 var(--dot-blur) var(--dot);
   }
 </style>

@@ -19,7 +19,7 @@ import { whatsappUrl } from '../../data/company';
   .wa {
     color: #052e16;
     background: #25d366;
-    box-shadow: 0 6px 20px rgb(0 0 0 / 0.4);
+    box-shadow: var(--float-shadow);
     animation: wa-pulse 2.8s ease-out infinite;
     transition: transform 0.2s ease;
   }
@@ -28,11 +28,11 @@ import { whatsappUrl } from '../../data/company';
   }
   @keyframes wa-pulse {
     0% {
-      box-shadow: 0 6px 20px rgb(0 0 0 / 0.4), 0 0 0 0 rgb(37 211 102 / 0.45);
+      box-shadow: var(--float-shadow), 0 0 0 0 rgb(37 211 102 / 0.45);
     }
     70%,
     100% {
-      box-shadow: 0 6px 20px rgb(0 0 0 / 0.4), 0 0 0 16px rgb(37 211 102 / 0);
+      box-shadow: var(--float-shadow), 0 0 0 16px rgb(37 211 102 / 0);
     }
   }
 </style>

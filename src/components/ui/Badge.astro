@@ -22,20 +22,20 @@ const { variant = 'default', class: className } = Astro.props;
     white-space: nowrap;
   }
   .badge-default {
-    color: var(--color-text);
-    background: rgb(34 211 238 / 0.12);
-    border: 1px solid rgb(34 211 238 / 0.3);
+    color: var(--c-text);
+    background: color-mix(in srgb, var(--c-primary-bright) 12%, transparent);
+    border: 1px solid color-mix(in srgb, var(--c-primary-bright) 30%, transparent);
   }
   .badge-soon {
-    color: var(--color-chain);
-    background: rgb(232 121 249 / 0.12);
-    border: 1px solid rgb(232 121 249 / 0.35);
+    color: var(--accent-chain);
+    background: color-mix(in srgb, var(--accent-chain-bright) 12%, transparent);
+    border: 1px solid color-mix(in srgb, var(--accent-chain-bright) 35%, transparent);
   }
   .badge-tech {
     font-family: var(--font-mono);
     font-weight: 500;
-    color: var(--color-text-muted);
-    background: rgb(255 255 255 / 0.04);
+    color: var(--c-text-muted);
+    background: var(--tint);
     border: 1px solid var(--border);
     border-radius: 6px;
   }

@@ -15,7 +15,7 @@ import { megaColumns } from '../../data/navigation';
             const soon = s.status === 'proximamente';
             const inner = (
               <>
-                <span class="mt-[0.45rem] size-2 flex-none rounded-full" style={`background:${s.accent};box-shadow:0 0 8px ${s.accent}`} aria-hidden="true" />
+                <span class="mt-[0.45rem] size-2 flex-none rounded-full" style={`background:${s.accent};box-shadow:0 0 var(--dot-blur) ${s.accent}`} aria-hidden="true" />
                 <span class="flex flex-col">
                   <span class="flex flex-wrap items-center gap-2 text-sm font-semibold text-text">
                     {s.brand}
@@ -30,7 +30,7 @@ import { megaColumns } from '../../data/navigation';
                 {soon ? (
                   <div class="flex gap-3 rounded-lg p-3 opacity-80">{inner}</div>
                 ) : (
-                  <a href={s.slug} class="mega-item flex gap-3 rounded-lg p-3 transition-colors hover:bg-white/5 focus-visible:bg-white/5">
+                  <a href={s.slug} class="mega-item flex gap-3 rounded-lg p-3 transition-colors hover:bg-(--hover-tint) focus-visible:bg-(--hover-tint)">
                     {inner}
                   </a>
                 )}

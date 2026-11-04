@@ -12,8 +12,10 @@ export interface Service {
   verb: Verb;
   secondaryVerb?: Verb;
   audience: Audience;
-  /** Color de acento (hex) */
+  /** Acento para texto e íconos: variable CSS por tema (var(--accent-<id>)) */
   accent: string;
+  /** Versión brillante para bordes y rellenos (var(--accent-<id>-bright)) */
+  accentBright: string;
   status: 'activo' | 'proximamente';
   summary: string;
   /** Contenido interno de un <svg viewBox="0 0 24 24"> de trazo (stroke) */
@@ -24,14 +26,15 @@ export interface VerbMeta {
   label: string;
   /** Título de columna en el mega menú */
   columnTitle: string;
+  /** Variable CSS (por tema) del color del verbo */
   color: string;
 }
 
 export const verbs: Record<Verb, VerbMeta> = {
-  piensa: { label: 'Piensa', columnTitle: 'Piensa', color: '#8B5CF6' },
-  protege: { label: 'Protege', columnTitle: 'Protege', color: '#34D399' },
-  escala: { label: 'Escala', columnTitle: 'Escala', color: '#22D3EE' },
-  base: { label: 'La base', columnTitle: 'La base', color: '#4F8DF7' },
+  piensa: { label: 'Piensa', columnTitle: 'Piensa', color: 'var(--verb-piensa)' },
+  protege: { label: 'Protege', columnTitle: 'Protege', color: 'var(--verb-protege)' },
+  escala: { label: 'Escala', columnTitle: 'Escala', color: 'var(--verb-escala)' },
+  base: { label: 'La base', columnTitle: 'La base', color: 'var(--accent-build)' },
 };
 
 /** Orden de las columnas del mega menú */
@@ -45,7 +48,8 @@ export const services: Service[] = [
     slug: '/servicios/desarrollo-de-software-a-medida/',
     verb: 'base',
     audience: 'empresas',
-    accent: '#4F8DF7',
+    accent: 'var(--accent-build)',
+    accentBright: 'var(--accent-build-bright)',
     status: 'activo',
     summary: 'Sistemas construidos sobre el proceso real de tu organización, no plantillas adaptadas.',
     icon: '<path d="m8 8-4 4 4 4M16 8l4 4-4 4M14 5l-4 14"/>',
@@ -57,7 +61,8 @@ export const services: Service[] = [
     slug: '/servicios/sistemas-saas/',
     verb: 'escala',
     audience: 'negocios',
-    accent: '#22D3EE',
+    accent: 'var(--accent-platforms)',
+    accentBright: 'var(--accent-platforms-bright)',
     status: 'activo',
     summary:
       'Sistemas en la nube con facturación electrónica, que usas desde tu celular sin invertir en equipos.',
@@ -70,7 +75,8 @@ export const services: Service[] = [
     slug: '/servicios/ia-agentica/',
     verb: 'piensa',
     audience: 'empresas',
-    accent: '#8B5CF6',
+    accent: 'var(--accent-mind)',
+    accentBright: 'var(--accent-mind-bright)',
     status: 'activo',
     summary:
       'Agentes de IA que cargan e interpretan información y envían mensajes automáticos, donde realmente aportan valor.',
@@ -83,7 +89,8 @@ export const services: Service[] = [
     slug: '/servicios/analitica-de-datos-y-dashboards/',
     verb: 'piensa',
     audience: 'empresas',
-    accent: '#818CF8',
+    accent: 'var(--accent-data)',
+    accentBright: 'var(--accent-data-bright)',
     status: 'activo',
     summary: 'Reportes y tableros con información actualizada para decidir con datos.',
     icon: '<path d="M4 20V10M10 20V4M16 20v-7M2 20h20"/>',
@@ -95,7 +102,8 @@ export const services: Service[] = [
     slug: '/servicios/ciberseguridad/',
     verb: 'protege',
     audience: 'empresas',
-    accent: '#34D399',
+    accent: 'var(--accent-shield)',
+    accentBright: 'var(--accent-shield-bright)',
     status: 'activo',
     summary: 'Sistemas desarrollados con la seguridad como requisito desde el primer día.',
     icon: '<rect x="5" y="10.5" width="14" height="10" rx="2"/><path d="M8 10.5V8a4 4 0 0 1 8 0v2.5"/>',
@@ -108,7 +116,8 @@ export const services: Service[] = [
     verb: 'escala',
     secondaryVerb: 'protege',
     audience: 'ambos',
-    accent: '#E879F9',
+    accent: 'var(--accent-chain)',
+    accentBright: 'var(--accent-chain-bright)',
     status: 'proximamente',
     summary: 'Próximamente.',
     icon: '<path d="M10 14a4 4 0 0 0 5.7 0l3-3a4 4 0 0 0-5.7-5.7l-1 1"/><path d="M14 10a4 4 0 0 0-5.7 0l-3 3a4 4 0 0 0 5.7 5.7l1-1"/>',

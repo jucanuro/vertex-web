@@ -63,32 +63,30 @@ const classes = ['btn', `btn-${variant}`, `btn-${size}`, className];
     padding: 1rem 2rem;
     font-size: 1.125rem;
   }
-  /* Gradiente de marca aclarado en el extremo azul para cumplir contraste AA con texto oscuro */
+  /* Oscuro: gradiente aclarado con texto oscuro. Claro: gradiente profundo con texto blanco (AA). Ver --btn-bg / --c-on-primary */
   .btn-primary {
-    color: #050b14;
-    background: linear-gradient(120deg, #2f80d8 0%, #22d3ee 50%, #5bf09a 100%);
+    color: var(--c-on-primary);
+    background: var(--btn-bg);
   }
   .btn-primary:hover {
-    box-shadow:
-      0 0 28px rgb(34 211 238 / 0.45),
-      0 0 60px rgb(91 240 154 / 0.2);
+    box-shadow: var(--btn-hover-shadow);
   }
   .btn-secondary {
-    color: var(--color-text);
+    color: var(--c-text);
     background: var(--glass);
     border: 1px solid var(--border);
     -webkit-backdrop-filter: blur(var(--glass-blur));
     backdrop-filter: blur(var(--glass-blur));
   }
   .btn-secondary:hover {
-    border-color: rgb(34 211 238 / 0.5);
+    border-color: color-mix(in srgb, var(--c-primary-bright) 50%, transparent);
     box-shadow: var(--shadow-glow-sm);
   }
   .btn-ghost {
-    color: var(--color-primary);
+    color: var(--c-primary);
     background: transparent;
   }
   .btn-ghost:hover {
-    background: rgb(34 211 238 / 0.08);
+    background: color-mix(in srgb, var(--c-primary-bright) 8%, transparent);
   }
 </style>

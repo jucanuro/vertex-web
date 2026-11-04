@@ -1,4 +1,8 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 10 230 210">
+  <style>
+    .n{stroke:#0A2F63}.d{fill:#fff;stroke:#0A2F63}
+    @media (prefers-color-scheme:dark){.n{stroke:#E8F1FF}.d{fill:#0B1424;stroke:#E8F1FF}}
+  </style>
   <defs>
     <linearGradient id="vGradI" x1="0" y1="0" x2="1" y2="1">
       <stop offset="0" stop-color="#1F5FB8"/>
@@ -12,11 +16,11 @@
   </defs>
   <path d="M15 45 L62 45 L102 145 L120 100 L143 100 L96 205 Z" fill="url(#vGradI)"/>
   <path d="M212 26 L150 110 L179 110 L128 196 L203 94 L174 94 Z" fill="url(#boltGradI)"/>
-  <g fill="none" stroke="#0A2F63" stroke-width="6" stroke-linecap="round" stroke-linejoin="round">
+  <g class="n" fill="none" stroke-width="6" stroke-linecap="round" stroke-linejoin="round">
     <polyline points="32,112 68,80 98,116 132,70 150,48"/>
     <line x1="98" y1="116" x2="98" y2="140"/>
   </g>
-  <g fill="#FFFFFF" stroke="#0A2F63" stroke-width="6">
+  <g class="d" stroke-width="6">
     <circle cx="32" cy="112" r="9"/>
     <circle cx="68" cy="80" r="8"/>
     <circle cx="98" cy="116" r="9"/>
