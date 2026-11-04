@@ -1,0 +1,38 @@
+---
+import { whatsappUrl } from '../../data/company';
+---
+
+<a
+  href={whatsappUrl}
+  target="_blank"
+  rel="noopener noreferrer"
+  aria-label="Escríbenos por WhatsApp"
+  class="wa fixed right-4 bottom-4 z-40 flex size-14 items-center justify-center rounded-full sm:right-6 sm:bottom-6"
+>
+  <svg viewBox="0 0 24 24" class="size-7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+    <path d="M3 21l1.65-4.9A8.5 8.5 0 1 1 8 19.4L3 21z"></path>
+    <path d="M9 9.5c0 3 2.5 5.5 5.5 5.5l1.2-1.4-2-1-.9.7a3.6 3.6 0 0 1-1.6-1.6l.7-.9-1-2L9 9.5z"></path>
+  </svg>
+</a>
+
+<style>
+  .wa {
+    color: #052e16;
+    background: #25d366;
+    box-shadow: 0 6px 20px rgb(0 0 0 / 0.4);
+    animation: wa-pulse 2.8s ease-out infinite;
+    transition: transform 0.2s ease;
+  }
+  .wa:hover {
+    transform: translateY(-2px) scale(1.04);
+  }
+  @keyframes wa-pulse {
+    0% {
+      box-shadow: 0 6px 20px rgb(0 0 0 / 0.4), 0 0 0 0 rgb(37 211 102 / 0.45);
+    }
+    70%,
+    100% {
+      box-shadow: 0 6px 20px rgb(0 0 0 / 0.4), 0 0 0 16px rgb(37 211 102 / 0);
+    }
+  }
+</style>

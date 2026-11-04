@@ -1,0 +1,16 @@
+---
+interface Props {
+  /** Retraso escalonado en ms (para el respaldo) y orden de escalonado */
+  delay?: number;
+  class?: string;
+}
+const { delay = 0, class: className } = Astro.props;
+---
+
+<div class:list={['reveal', className]} style={`--delay:${delay}ms;--step:${delay / 100}`}>
+  <slot />
+</div>
+
+<script>
+  import '../../scripts/reveal';
+</script>

@@ -1,0 +1,42 @@
+---
+interface Props {
+  variant?: 'default' | 'soon' | 'tech';
+  class?: string;
+}
+const { variant = 'default', class: className } = Astro.props;
+---
+
+<span class:list={['badge', `badge-${variant}`, className]}>
+  {variant === 'soon' && !Astro.slots.has('default') ? 'Próximamente' : <slot />}
+</span>
+
+<style>
+  .badge {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.2rem 0.6rem;
+    border-radius: 9999px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    line-height: 1.4;
+    white-space: nowrap;
+  }
+  .badge-default {
+    color: var(--color-text);
+    background: rgb(34 211 238 / 0.12);
+    border: 1px solid rgb(34 211 238 / 0.3);
+  }
+  .badge-soon {
+    color: var(--color-chain);
+    background: rgb(232 121 249 / 0.12);
+    border: 1px solid rgb(232 121 249 / 0.35);
+  }
+  .badge-tech {
+    font-family: var(--font-mono);
+    font-weight: 500;
+    color: var(--color-text-muted);
+    background: rgb(255 255 255 / 0.04);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+  }
+</style>

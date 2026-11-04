@@ -1,0 +1,15 @@
+---
+import LegalLayout from '../layouts/LegalLayout.astro';
+
+const sections = [
+  { heading: 'Uso del sitio', text: 'Este sitio presenta los servicios y productos de Vertex Quant Labs. Al usarlo aceptas estos términos. Si no estás de acuerdo, te pedimos no utilizarlo.' },
+  { heading: 'Información del sitio', text: 'El contenido es informativo. Las condiciones de cada proyecto o servicio se acuerdan por escrito en una propuesta, no en este sitio.' },
+  { heading: 'Propiedad intelectual', text: 'Los textos, marcas, logotipos y demás elementos del sitio pertenecen a sus titulares. No puedes copiarlos ni usarlos sin autorización previa.' },
+  { heading: 'Enlaces y servicios de terceros', text: 'El sitio puede enlazar a servicios externos, como WhatsApp. No controlamos esos servicios y no somos responsables de su contenido o sus condiciones.' },
+  { heading: 'Limitación de responsabilidad', text: 'Hacemos lo posible por mantener el sitio disponible y actualizado, pero no garantizamos que esté libre de errores o interrupciones.' },
+  { heading: 'Cambios en los términos', text: 'Podemos actualizar estos términos. La versión vigente es la publicada en esta página.' },
+  { heading: 'Datos de la empresa y ley aplicable', text: 'Los datos de la empresa y la ley aplicable se completarán en la versión final de este documento.' },
+];
+---
+
+<LegalLayout path="/terminos/" title="Términos y condiciones" sections={sections} />

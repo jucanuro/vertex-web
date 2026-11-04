@@ -1,0 +1,15 @@
+---
+import LegalLayout from '../layouts/LegalLayout.astro';
+
+const sections = [
+  { heading: 'Qué datos podemos recibir', text: 'Los que tú nos envías al escribirnos por WhatsApp o, cuando esté disponible, por el formulario del sitio: por ejemplo tu nombre, tu teléfono y el mensaje con tu consulta.' },
+  { heading: 'Para qué los usamos', text: 'Para responder tu consulta, coordinar una reunión de diagnóstico y preparar una propuesta. No usamos tus datos para fines distintos sin avisarte.' },
+  { heading: 'Con quién los compartimos', text: 'No vendemos tus datos personales. Solo los compartimos con proveedores que nos ayudan a operar el sitio y la atención, cuando sea necesario, o cuando la ley lo exija.' },
+  { heading: 'Cuánto tiempo los conservamos', text: 'El tiempo necesario para atender tu consulta y cumplir obligaciones legales. Después los eliminamos o anonimizamos.' },
+  { heading: 'Tus derechos', text: 'Puedes pedir acceso, corrección o eliminación de tus datos escribiéndonos por WhatsApp.' },
+  { heading: 'Cambios en esta política', text: 'Podemos actualizar este texto. Publicaremos la versión vigente en esta misma página.' },
+  { heading: 'Responsable del tratamiento', text: 'Los datos de la empresa responsable se completarán en la versión final de este documento.' },
+];
+---
+
+<LegalLayout path="/privacidad/" title="Política de privacidad" sections={sections} />

@@ -1,0 +1,176 @@
+---
+import BaseLayout from './BaseLayout.astro';
+import PageHero from '../components/templates/PageHero.astro';
+import CTABlock from '../components/templates/CTABlock.astro';
+import CaseCard from '../components/templates/CaseCard.astro';
+import Section from '../components/ui/Section.astro';
+import SectionHeading from '../components/ui/SectionHeading.astro';
+import Reveal from '../components/ui/Reveal.astro';
+import GlassCard from '../components/ui/GlassCard.astro';
+import Button from '../components/ui/Button.astro';
+import Badge from '../components/ui/Badge.astro';
+import Icon from '../components/ui/Icon.astro';
+import ImagePlaceholder from '../components/ui/ImagePlaceholder.astro';
+import ServiceCard from '../components/services/ServiceCard.astro';
+import Process from '../components/home/Process.astro';
+import { paths } from '../data/paths';
+import { servicesById } from '../data/services';
+import { products } from '../data/products';
+import { pillars } from '../data/pillars';
+import { cases } from '../data/cases';
+import { seo } from '../data/seo';
+import { whatsappUrl } from '../data/company';
+
+interface Props {
+  path: 'negocios' | 'empresas';
+}
+const { path } = Astro.props;
+const d = paths[path];
+const meta = seo[`/${path}/`];
+const offer = d.offer && servicesById[d.offer.serviceId];
+const example = d.example && products[d.example.productId];
+const pathPillars = d.pillarIds.map((id) => pillars.find((p) => p.id === id)!);
+const pathCases = (d.cases?.ids ?? []).map((id) => cases.find((c) => c.id === id)!);
+const negocios = path === 'negocios';
+---
+
+<BaseLayout title={meta.title} description={meta.description}>
+  <PageHero
+    eyebrow={d.eyebrow}
+    title={d.h1}
+    highlight={d.highlight}
+    subtitle={d.subtitle}
+    gradient={path}
+    breadcrumbs={[{ label: d.eyebrow }]}
+  >
+    {
+      negocios ? (
+        <Button href={whatsappUrl} variant="primary" size="lg" target="_blank" rel="noopener noreferrer">Escríbenos por WhatsApp</Button>
+      ) : (
+        <Button href="/contacto/" variant="primary" size="lg">Agenda tu diagnóstico sin costo</Button>
+      )
+    }
+  </PageHero>
+
+  <Section bg="none">
+    <Reveal><SectionHeading eyebrow={d.pain.eyebrow} title={d.pain.title} /></Reveal>
+    <ul class="mt-10 grid gap-5 md:grid-cols-3">
+      {
+        d.pain.items.map((it, i) => (
+          <li>
+            <Reveal delay={i * 100} class="h-full">
+              <GlassCard as="div" class="flex h-full flex-col gap-2">
+                <h3 class="text-h3">{it.title}</h3>
+                <p class="text-sm text-text-muted">{it.text}</p>
+              </GlassCard>
+            </Reveal>
+          </li>
+        ))
+      }
+    </ul>
+  </Section>
+
+  {
+    d.offer && offer && (
+      <Section bg="alt">
+        <div class="grid items-center gap-10 lg:grid-cols-2">
+          <Reveal>
+            <SectionHeading eyebrow={d.offer.eyebrow} title={d.offer.title} subtitle={d.offer.text} />
+            <p class="mt-6">
+              <a href={offer.slug} class="font-semibold text-primary underline-offset-4 hover:underline">Conocer Vertex Platforms →</a>
+            </p>
+          </Reveal>
+          <Reveal delay={100}><ServiceCard service={offer} as="div" descriptorAs="p" /></Reveal>
+        </div>
+      </Section>
+    )
+  }
+
+  {
+    d.how && (
+      <Section bg="grid">
+        <Reveal><SectionHeading eyebrow={d.how.eyebrow} title={d.how.title} /></Reveal>
+        <ol class="mt-10 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
+          {
+            d.how.items.map((it, i) => (
+              <li>
+                <Reveal delay={i * 100} class="h-full">
+                  <GlassCard as="div" class="flex h-full flex-col gap-2 !p-5">
+                    <span class="text-gradient font-mono text-3xl font-bold" aria-hidden="true">{String(i + 1).padStart(2, '0')}</span>
+                    <h3 class="text-lg leading-snug">{it.title}</h3>
+                    <p class="text-sm text-text-muted">{it.text}</p>
+                  </GlassCard>
+                </Reveal>
+              </li>
+            ))
+          }
+        </ol>
+      </Section>
+    )
+  }
+
+  {
+    d.example && example && (
+      <Section bg="none">
+        <div class="grid items-center gap-10 lg:grid-cols-2 lg:gap-14">
+          <Reveal>
+            <div class="flex flex-col items-start gap-4">
+              <SectionHeading eyebrow={d.example.eyebrow} title={d.example.title} />
+              <Badge>En operación</Badge>
+              <p class="text-text-muted">{d.example.text}</p>
+              <p class="text-text-muted">{example.description}</p>
+              <a href={example.slug} class="font-semibold text-primary underline-offset-4 hover:underline" aria-label={`Conocer ${example.name}`}>Conocer {example.name} →</a>
+            </div>
+          </Reveal>
+          <Reveal delay={100}><ImagePlaceholder ratio="16 / 10" label={`Espacio para captura: ${example.name}`} /></Reveal>
+        </div>
+      </Section>
+    )
+  }
+
+  {
+    d.services && (
+      <Section bg="alt">
+        <Reveal><SectionHeading eyebrow={d.services.eyebrow} title={d.services.title} /></Reveal>
+        <ul class="mt-10 grid gap-6 sm:grid-cols-2 xl:grid-cols-4">
+          {d.services.ids.map((sid, i) => <li><Reveal delay={i * 100} class="h-full"><ServiceCard service={servicesById[sid]} as="div" /></Reveal></li>)}
+        </ul>
+      </Section>
+    )
+  }
+
+  {d.process && <Process />}
+
+  {
+    pathCases.length > 0 && d.cases && (
+      <Section bg="none">
+        <Reveal><SectionHeading eyebrow={d.cases.eyebrow} title={d.cases.title} /></Reveal>
+        <ul class="mt-10 grid gap-6 lg:grid-cols-3">
+          {pathCases.map((c, i) => <li><Reveal delay={i * 100} class="h-full"><CaseCard item={c} as="div" /></Reveal></li>)}
+        </ul>
+        <Reveal class="mt-8"><a href="/casos/" class="font-semibold text-primary underline-offset-4 hover:underline">Ver todos los casos →</a></Reveal>
+      </Section>
+    )
+  }
+
+  <Section bg={negocios ? 'none' : 'alt'}>
+    <Reveal><SectionHeading eyebrow="Nuestra forma de trabajar" title={pathPillars.length > 1 ? 'Pilares que aplican a tu organización' : `Pilar: ${pathPillars[0].title}`} /></Reveal>
+    <ul class:list={['mt-10 grid gap-5', pathPillars.length > 1 && 'md:grid-cols-2']}>
+      {
+        pathPillars.map((p, i) => (
+          <li>
+            <Reveal delay={i * 100} class="h-full">
+              <GlassCard as="div" class="flex h-full flex-col gap-4">
+                <span class="flex size-11 items-center justify-center rounded-lg border border-primary/30 bg-primary/10 text-primary"><Icon svg={p.icon} /></span>
+                <h3 class="text-h3">{p.title}</h3>
+                <p class="text-text-muted">{p.description}</p>
+              </GlassCard>
+            </Reveal>
+          </li>
+        ))
+      }
+    </ul>
+  </Section>
+
+  <CTABlock audience={d.cta.audience} />
+</BaseLayout>

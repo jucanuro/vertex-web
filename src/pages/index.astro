@@ -1,11 +1,51 @@
 ---
-import Welcome from '../components/Welcome.astro';
-import Layout from '../layouts/Layout.astro';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Hero from '../components/home/Hero.astro';
+import ClientsStrip from '../components/home/ClientsStrip.astro';
+import PathChooser from '../components/home/PathChooser.astro';
+import ServicesByVerb from '../components/home/ServicesByVerb.astro';
+import Pillars from '../components/home/Pillars.astro';
+import GrowWithYou from '../components/home/GrowWithYou.astro';
+import FeaturedCases from '../components/home/FeaturedCases.astro';
+import OwnProducts from '../components/home/OwnProducts.astro';
+import Stats from '../components/home/Stats.astro';
+import Process from '../components/home/Process.astro';
+import Philosophy from '../components/home/Philosophy.astro';
+import FinalCTA from '../components/home/FinalCTA.astro';
+import { company } from '../data/company';
 
-// Welcome to Astro! Wondering what to do next? Check out the Astro documentation at https://docs.astro.build
-// Don't want to use any of this? Delete everything in this file, the `assets`, `components`, and `layouts` directories, and start fresh.
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'Organization',
+  name: company.name,
+  url: Astro.site!.origin,
+  logo: new URL('/brand/vertex-icon.svg', Astro.site).href,
+  slogan: company.slogan,
+  areaServed: ['PE', 'CL', 'ES'],
+  contactPoint: {
+    '@type': 'ContactPoint',
+    telephone: `+${company.whatsapp.number}`,
+    contactType: 'customer service',
+    availableLanguage: 'es',
+  },
+};
 ---
 
-<Layout>
-	<Welcome />
-</Layout>
+<BaseLayout
+  title="Software a medida, IA y ciberseguridad"
+  description="Tecnología que piensa, protege y escala. Software a medida, IA agéntica, datos y ciberseguridad para empresas en Perú, Chile y España, y SaaS para negocios."
+  jsonLd={jsonLd}
+>
+  <Hero />
+  <ClientsStrip />
+  <PathChooser />
+  <ServicesByVerb />
+  <Pillars />
+  <GrowWithYou />
+  <FeaturedCases />
+  <OwnProducts />
+  <Stats />
+  <Process />
+  <Philosophy />
+  <FinalCTA />
+</BaseLayout>

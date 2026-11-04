@@ -1,0 +1,257 @@
+---
+import Logo from '../brand/Logo.astro';
+import Button from '../ui/Button.astro';
+import MegaMenuContent from './MegaMenuContent.astro';
+import { navigation, megaColumns, type Locale } from '../../data/navigation';
+
+interface Props {
+  lang?: Locale;
+}
+const { lang = 'es' } = Astro.props;
+const nav = navigation[lang];
+const path = Astro.url.pathname;
+const active = (href: string) => path.startsWith(href);
+const paths = nav.main.filter((i) => i.kind === 'link' && i.path);
+const rest = nav.main.filter((i) => i.kind === 'link' && !i.path);
+const mega = nav.main.find((i) => i.kind === 'mega');
+---
+
+<header data-header class="header fixed inset-x-0 top-0 z-50">
+  <div class="relative mx-auto flex h-(--header-h) max-w-[1200px] items-center justify-between gap-4 px-5 sm:px-8">
+    <a href="/" aria-label="Vertex Quant Labs, inicio" class="relative z-10 rounded-md">
+      <Logo class="text-[0.9rem] sm:text-base" />
+    </a>
+
+    <nav aria-label="Principal" class="hidden h-full lg:block">
+      <ul class="flex h-full items-center gap-1">
+        {
+          nav.main.map((item) =>
+            item.kind === 'mega' ? (
+              <li data-dropdown class="flex h-full items-center">
+                <button
+                  type="button"
+                  aria-expanded="false"
+                  aria-controls="mega-servicios"
+                  aria-current={active(item.href) ? 'page' : undefined}
+                  class="nav-link flex items-center gap-1.5 rounded-md px-3 py-2 text-sm font-medium text-text-muted transition-colors hover:text-text aria-expanded:text-text aria-[current=page]:text-primary"
+                >
+                  {item.label}
+                  <svg viewBox="0 0 24 24" class="chev size-4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <path d="m6 9 6 6 6-6" />
+                  </svg>
+                </button>
+                <div id="mega-servicios" data-dropdown-panel class="dropdown-panel absolute inset-x-5 top-full pt-3 sm:inset-x-8">
+                  <div class="glass rounded-xl p-4 shadow-2xl" style="background:rgb(8 17 31 / 0.96)">
+                    <MegaMenuContent />
+                  </div>
+                </div>
+              </li>
+            ) : (
+              <li>
+                <a
+                  href={item.href}
+                  aria-current={active(item.href) ? 'page' : undefined}
+                  data-path={item.path}
+                  class:list={['nav-link block rounded-md px-3 py-2 text-sm font-medium text-text-muted transition-colors hover:text-text aria-[current=page]:text-text', item.path && 'path-link']}
+                >
+                  {item.label}
+                </a>
+              </li>
+            ),
+          )
+        }
+      </ul>
+    </nav>
+
+    <div class="relative z-10 flex items-center gap-3">
+      <div class="hidden items-center gap-1 font-mono text-xs sm:flex" aria-label="Idioma">
+        <span class="px-1.5 py-1 text-text" aria-current="true">ES</span>
+        <span class="text-text-muted">/</span>
+        <span class="cursor-not-allowed px-1.5 py-1 text-text-muted opacity-70" aria-disabled="true" title="Próximamente">EN</span>
+      </div>
+      <Button href={nav.cta.href} size="sm" class="hidden sm:inline-flex">{nav.cta.label}</Button>
+      <button
+        type="button"
+        data-menu-toggle
+        aria-expanded="false"
+        aria-controls="menu-movil"
+        aria-label="Menú"
+        class="flex size-11 items-center justify-center rounded-md text-text lg:hidden"
+      >
+        <svg viewBox="0 0 24 24" class="size-6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true">
+          <path d="M4 7h16"></path>
+          <path d="M4 12h16"></path>
+          <path d="M4 17h16"></path>
+        </svg>
+      </button>
+    </div>
+
+    <div
+      id="menu-movil"
+      data-menu-panel
+      hidden
+      class="glass fixed inset-0 z-0 flex flex-col overflow-y-auto px-5 pt-[calc(var(--header-h)+1.5rem)] pb-10 lg:hidden"
+      style="background:rgb(5 11 20 / 0.96)"
+    >
+      <nav aria-label="Móvil" class="flex flex-col gap-6">
+        <ul class="grid grid-cols-2 gap-3">
+          {
+            paths.map((item) => item.kind === 'link' && (
+              <li>
+                <a
+                  href={item.href}
+                  data-path={item.path}
+                  aria-current={active(item.href) ? 'page' : undefined}
+                  class="path-card flex min-h-24 flex-col justify-between rounded-xl p-4 font-display text-lg font-extrabold"
+                >
+                  {item.label}
+                  <span aria-hidden="true">→</span>
+                </a>
+              </li>
+            ))
+          }
+        </ul>
+
+        <ul class="flex flex-col">
+          {
+            mega && mega.kind === 'mega' && (
+              <li class="border-b border-(--border)">
+                <details class="group">
+                  <summary class="flex cursor-pointer list-none items-center justify-between py-4 font-display text-2xl font-extrabold [&::-webkit-details-marker]:hidden">
+                    {mega.label}
+                    <svg viewBox="0 0 24 24" class="size-5 transition-transform group-open:rotate-180" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                      <path d="m6 9 6 6 6-6" />
+                    </svg>
+                  </summary>
+                  <div class="flex flex-col gap-5 pb-5">
+                    {megaColumns.map((col) => (
+                      <div>
+                        <p class="mb-2 font-mono text-xs font-medium tracking-[0.18em] uppercase" style={`color:${col.color}`}>{col.title}</p>
+                        <ul class="flex flex-col gap-1">
+                          {col.items.map((s) => (
+                            <li>
+                              {s.status === 'proximamente' ? (
+                                <p class="py-2 text-sm text-text-muted">
+                                  {s.brand} · Próximamente
+                                </p>
+                              ) : (
+                                <a href={s.slug} class="flex gap-3 py-2">
+                                  <span class="mt-[0.45rem] size-2 flex-none rounded-full" style={`background:${s.accent}`} aria-hidden="true" />
+                                  <span class="flex flex-col">
+                                    <span class="text-sm font-semibold">{s.brand}</span>
+                                    <span class="text-xs text-text-muted">{s.descriptor}</span>
+                                  </span>
+                                </a>
+                              )}
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+                    ))}
+                  </div>
+                </details>
+              </li>
+            )
+          }
+          {
+            rest.map((item) => (
+              <li class="border-b border-(--border)">
+                <a href={item.href} class="block py-4 font-display text-2xl font-extrabold">{item.label}</a>
+              </li>
+            ))
+          }
+        </ul>
+      </nav>
+      <div class="mt-8 flex flex-col gap-4">
+        <Button href={nav.cta.href} size="lg">{nav.cta.label}</Button>
+        <p class="font-mono text-xs text-text-muted">
+          ES / <span title="Próximamente" aria-disabled="true" class="opacity-70">EN</span>
+        </p>
+      </div>
+    </div>
+  </div>
+</header>
+
+<style>
+  .header::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    opacity: 0;
+    background: rgb(5 11 20 / 0.7);
+    -webkit-backdrop-filter: blur(16px);
+    backdrop-filter: blur(16px);
+    border-bottom: 1px solid var(--border);
+    transition: opacity 0.25s ease;
+  }
+  .header[data-scrolled]::before {
+    opacity: 1;
+  }
+  .dropdown-panel {
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(6px);
+    transition:
+      opacity 180ms ease,
+      transform 180ms ease,
+      visibility 0s linear 180ms;
+  }
+  [data-dropdown][data-open] > .dropdown-panel {
+    opacity: 1;
+    visibility: visible;
+    transform: none;
+    transition-delay: 0s;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .dropdown-panel {
+      transition: none;
+    }
+  }
+  .chev {
+    transition: transform 0.2s ease;
+  }
+  button[aria-expanded='true'] .chev {
+    transform: rotate(180deg);
+  }
+  /* Subrayado con gradiente de camino */
+  .path-link {
+    position: relative;
+  }
+  .path-link::after {
+    content: '';
+    position: absolute;
+    left: 0.75rem;
+    right: 0.75rem;
+    bottom: 0.2rem;
+    height: 2px;
+    border-radius: 2px;
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.25s ease;
+  }
+  .path-link[data-path='negocios']::after,
+  .path-card[data-path='negocios'] {
+    background: var(--gradient-negocios);
+  }
+  .path-link[data-path='empresas']::after,
+  .path-card[data-path='empresas'] {
+    background: var(--gradient-empresas);
+  }
+  .path-link:hover::after,
+  .path-link:focus-visible::after,
+  .path-link[aria-current='page']::after {
+    transform: scaleX(1);
+  }
+  .path-card[data-path='negocios'] {
+    color: #050b14;
+  }
+  .path-card[data-path='empresas'] {
+    color: #fff;
+  }
+</style>
+
+<script>
+  import '../../scripts/header';
+  import '../../scripts/megamenu';
+</script>

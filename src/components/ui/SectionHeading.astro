@@ -1,0 +1,29 @@
+---
+import Eyebrow from './Eyebrow.astro';
+
+interface Props {
+  eyebrow?: string;
+  title: string;
+  /** Fragmento del título a resaltar con .text-gradient */
+  highlight?: string;
+  subtitle?: string;
+  as?: 'h1' | 'h2' | 'h3';
+  align?: 'left' | 'center';
+  class?: string;
+}
+const { eyebrow, title, highlight, subtitle, as: Tag = 'h2', align = 'left', class: className } = Astro.props;
+const idx = highlight ? title.indexOf(highlight) : -1;
+const parts =
+  highlight && idx >= 0
+    ? [title.slice(0, idx), highlight, title.slice(idx + highlight.length)]
+    : null;
+const sizeClass = Tag === 'h1' ? 'text-h1' : Tag === 'h3' ? 'text-h3' : 'text-h2';
+---
+
+<div class:list={['flex flex-col gap-4', align === 'center' && 'items-center text-center', className]}>
+  {eyebrow && <Eyebrow>{eyebrow}</Eyebrow>}
+  <Tag class={`${sizeClass} max-w-4xl text-balance`}>
+    {parts ? <>{parts[0]}<span class="text-gradient">{parts[1]}</span>{parts[2]}</> : title}
+  </Tag>
+  {subtitle && <p class="max-w-2xl text-text-muted text-balance">{subtitle}</p>}
+</div>

@@ -1,0 +1,94 @@
+---
+import type { HTMLAttributes } from 'astro/types';
+
+interface Props {
+  variant?: 'primary' | 'secondary' | 'ghost';
+  size?: 'sm' | 'md' | 'lg';
+  href?: string;
+  type?: 'button' | 'submit' | 'reset';
+  class?: string;
+  rel?: string;
+  target?: string;
+}
+const { variant = 'primary', size = 'md', href, type = 'button', class: className, ...rest } = Astro.props;
+const classes = ['btn', `btn-${variant}`, `btn-${size}`, className];
+---
+
+{
+  href ? (
+    <a href={href} class:list={classes} {...(rest as HTMLAttributes<'a'>)}>
+      <slot />
+    </a>
+  ) : (
+    <button type={type} class:list={classes} {...(rest as HTMLAttributes<'button'>)}>
+      <slot />
+    </button>
+  )
+}
+
+<style>
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    border-radius: var(--radius-md);
+    font-family: var(--font-sans);
+    font-weight: 600;
+    line-height: 1.2;
+    text-align: center;
+    white-space: nowrap;
+    cursor: pointer;
+    transition:
+      transform 0.2s ease,
+      box-shadow 0.2s ease,
+      background-color 0.2s ease,
+      border-color 0.2s ease;
+  }
+  .btn:hover {
+    transform: translateY(-2px);
+  }
+  .btn:active {
+    transform: translateY(0);
+  }
+  .btn-sm {
+    padding: 0.5rem 1rem;
+    font-size: 0.875rem;
+  }
+  .btn-md {
+    padding: 0.75rem 1.5rem;
+    font-size: 1rem;
+  }
+  .btn-lg {
+    padding: 1rem 2rem;
+    font-size: 1.125rem;
+  }
+  /* Gradiente de marca aclarado en el extremo azul para cumplir contraste AA con texto oscuro */
+  .btn-primary {
+    color: #050b14;
+    background: linear-gradient(120deg, #2f80d8 0%, #22d3ee 50%, #5bf09a 100%);
+  }
+  .btn-primary:hover {
+    box-shadow:
+      0 0 28px rgb(34 211 238 / 0.45),
+      0 0 60px rgb(91 240 154 / 0.2);
+  }
+  .btn-secondary {
+    color: var(--color-text);
+    background: var(--glass);
+    border: 1px solid var(--border);
+    -webkit-backdrop-filter: blur(var(--glass-blur));
+    backdrop-filter: blur(var(--glass-blur));
+  }
+  .btn-secondary:hover {
+    border-color: rgb(34 211 238 / 0.5);
+    box-shadow: var(--shadow-glow-sm);
+  }
+  .btn-ghost {
+    color: var(--color-primary);
+    background: transparent;
+  }
+  .btn-ghost:hover {
+    background: rgb(34 211 238 / 0.08);
+  }
+</style>

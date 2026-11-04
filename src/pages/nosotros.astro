@@ -1,0 +1,58 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PageHero from '../components/templates/PageHero.astro';
+import CTABlock from '../components/templates/CTABlock.astro';
+import Pillars from '../components/home/Pillars.astro';
+import Stats from '../components/home/Stats.astro';
+import Process from '../components/home/Process.astro';
+import Section from '../components/ui/Section.astro';
+import SectionHeading from '../components/ui/SectionHeading.astro';
+import Reveal from '../components/ui/Reveal.astro';
+import ImagePlaceholder from '../components/ui/ImagePlaceholder.astro';
+import { company } from '../data/company';
+import { seo } from '../data/seo';
+
+const meta = seo['/nosotros/'];
+---
+
+<BaseLayout title={meta.title} description={meta.description}>
+  <PageHero
+    eyebrow="Nosotros"
+    title="Una casa de tecnología que crece contigo"
+    highlight="crece contigo"
+    subtitle={company.slogan}
+    breadcrumbs={[{ label: 'Nosotros' }]}
+  />
+
+  <Section bg="none">
+    <Reveal>
+      <SectionHeading eyebrow="Nuestra filosofía" title="Tecnología al alcance de cualquier negocio" />
+      <p class="mt-6 max-w-3xl text-lg text-text-muted">{company.philosophy}</p>
+    </Reveal>
+  </Section>
+
+  <Pillars />
+  <Stats />
+  <Process />
+
+  <Section bg="alt">
+    <div class="grid items-center gap-10 md:grid-cols-[minmax(0,18rem)_1fr] md:gap-14">
+      <Reveal>
+        <ImagePlaceholder ratio="1 / 1" label="Foto pendiente" />
+      </Reveal>
+      <Reveal delay={100}>
+        <SectionHeading eyebrow="Fundador" title="Quién está detrás" />
+        <p class="mt-3 font-mono text-sm text-text-muted">Juan Carlos Núñez · Fundador</p>
+      </Reveal>
+    </div>
+  </Section>
+
+  <Section bg="none">
+    <Reveal>
+      <SectionHeading eyebrow="Mercados" title="Perú, Chile y España" subtitle={company.markets + '.'} />
+      <p class="mt-4 text-text-muted">{company.location}</p>
+    </Reveal>
+  </Section>
+
+  <CTABlock audience="empresas" />
+</BaseLayout>

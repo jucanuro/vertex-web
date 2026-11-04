@@ -1,0 +1,47 @@
+---
+import Section from '../ui/Section.astro';
+import Reveal from '../ui/Reveal.astro';
+import Button from '../ui/Button.astro';
+import { whatsappUrl } from '../../data/company';
+
+interface Props {
+  /** empresas: diagnóstico + WhatsApp. negocios: WhatsApp como acción principal. */
+  audience?: 'empresas' | 'negocios';
+  title?: string;
+  text?: string;
+  /** Enlace de WhatsApp alternativo (mensaje prellenado) */
+  whatsapp?: string;
+  whatsappLabel?: string;
+}
+const {
+  audience = 'empresas',
+  title = audience === 'negocios' ? '¿Quieres ver cómo funciona en tu negocio? Escríbenos.' : '¿Tu organización tiene un proceso por mejorar? Conversemos.',
+  text = audience === 'negocios'
+    ? 'Cuéntanos por WhatsApp cómo trabajas hoy y te mostramos cómo se vería en tu celular.'
+    : 'Agenda una reunión de diagnóstico sin costo y te enviamos una propuesta clara con alcance, plazo e inversión.',
+  whatsapp = whatsappUrl,
+  whatsappLabel = 'Escríbenos por WhatsApp',
+} = Astro.props;
+---
+
+<Section bg="none">
+  <Reveal>
+    <div class="glow-border relative isolate overflow-hidden rounded-3xl bg-bg-900 px-6 py-14 text-center sm:px-12 sm:py-20">
+      <div class="bg-aurora absolute inset-0 -z-10" aria-hidden="true"></div>
+      <h2 class="text-h2 mx-auto max-w-3xl text-balance">{title}</h2>
+      <p class="mx-auto mt-5 max-w-2xl text-text-muted text-balance">{text}</p>
+      <div class="mt-8 flex flex-col items-stretch justify-center gap-3 sm:flex-row sm:items-center">
+        {
+          audience === 'negocios' ? (
+            <Button href={whatsapp} variant="primary" size="lg" target="_blank" rel="noopener noreferrer">{whatsappLabel}</Button>
+          ) : (
+            <>
+              <Button href="/contacto/" variant="primary" size="lg">Agenda tu diagnóstico sin costo</Button>
+              <Button href={whatsapp} variant="secondary" size="lg" target="_blank" rel="noopener noreferrer">{whatsappLabel}</Button>
+            </>
+          )
+        }
+      </div>
+    </div>
+  </Reveal>
+</Section>

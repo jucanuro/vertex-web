@@ -1,0 +1,21 @@
+---
+import LogoMark from '../brand/LogoMark.astro';
+
+interface Props {
+  ratio?: string;
+  label?: string;
+  class?: string;
+}
+const { ratio = '16 / 9', label = 'Imagen pendiente', class: className } = Astro.props;
+const uid = `ph-${Math.random().toString(36).slice(2, 8)}`;
+---
+
+<div
+  class:list={['bg-grid relative flex items-center justify-center overflow-hidden rounded-xl border border-(--border) bg-surface-800', className]}
+  style={`aspect-ratio:${ratio}`}
+  role="img"
+  aria-label={label}
+>
+  <LogoMark uid={uid} muted class="absolute h-1/2 max-h-40" />
+  <span class="relative px-4 text-center font-mono text-xs text-text-muted">{label}</span>
+</div>

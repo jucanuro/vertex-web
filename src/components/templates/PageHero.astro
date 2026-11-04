@@ -1,0 +1,51 @@
+---
+import Eyebrow from '../ui/Eyebrow.astro';
+import Breadcrumbs, { type Crumb } from './Breadcrumbs.astro';
+
+interface Props {
+  eyebrow?: string;
+  title: string;
+  /** Fragmento del título con degradado */
+  highlight?: string;
+  subtitle?: string;
+  breadcrumbs: Crumb[];
+  gradient?: 'brand' | 'negocios' | 'empresas';
+  bg?: 'aurora' | 'grid';
+  /** Color del punto del eyebrow */
+  accent?: string;
+}
+const { eyebrow, title, highlight, subtitle, breadcrumbs, gradient = 'brand', bg = 'aurora', accent } = Astro.props;
+const idx = highlight ? title.indexOf(highlight) : -1;
+const parts = highlight && idx >= 0 ? [title.slice(0, idx), highlight, title.slice(idx + highlight.length)] : null;
+---
+
+<header class="relative isolate overflow-hidden" style="padding-block:calc(var(--header-h) + 2rem) clamp(3rem,2rem + 4vw,5.5rem)">
+  {
+    bg === 'aurora' ? (
+      <div class="bg-aurora absolute inset-0 -z-10" aria-hidden="true" />
+    ) : (
+      <div
+        class="bg-grid absolute inset-0 -z-10"
+        style="mask-image:radial-gradient(ellipse at center,#000 30%,transparent 80%);-webkit-mask-image:radial-gradient(ellipse at center,#000 30%,transparent 80%)"
+        aria-hidden="true"
+      />
+    )
+  }
+  <div class="mx-auto flex w-full max-w-[1200px] flex-col gap-6 px-5 sm:px-8">
+    <Breadcrumbs items={breadcrumbs} />
+    {eyebrow && <Eyebrow color={accent}>{eyebrow}</Eyebrow>}
+    <h1 class="text-h1 max-w-4xl text-balance">
+      {
+        parts ? (
+          <>{parts[0]}<span class="text-gradient" style={`background-image:var(--gradient-${gradient})`}>{parts[1]}</span>{parts[2]}</>
+        ) : (
+          title
+        )
+      }
+    </h1>
+    {subtitle && <p class="max-w-2xl text-lg text-text-muted text-balance">{subtitle}</p>}
+    <div class="mt-2 flex flex-col items-stretch gap-3 sm:flex-row sm:items-center empty:hidden">
+      <slot />
+    </div>
+  </div>
+</header>

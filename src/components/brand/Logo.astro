@@ -1,0 +1,56 @@
+---
+import LogoMark from './LogoMark.astro';
+
+interface Props {
+  variant?: 'full' | 'icon';
+  class?: string;
+}
+const { variant = 'full', class: className = '' } = Astro.props;
+// id único por instancia para evitar colisiones de gradientes en la misma página
+const uid = `lg-${Math.random().toString(36).slice(2, 8)}`;
+---
+
+<span
+  role="img"
+  aria-label="Vertex Quant Labs"
+  class:list={['logo inline-flex items-center gap-[0.55em] leading-none', className]}
+>
+  <LogoMark uid={uid} class="logo-mark" />
+  {
+    variant === 'full' && (
+      <span class="flex flex-col gap-[0.35em]" aria-hidden="true">
+        <span class="logo-word">VERTEX</span>
+        <span class="logo-sub">QUANT LABS</span>
+      </span>
+    )
+  }
+</span>
+
+<style>
+  .logo {
+    font-size: 1rem;
+  }
+  .logo-mark {
+    height: 2.4em;
+    width: auto;
+    flex: none;
+  }
+  .logo-word {
+    font-family: var(--font-display);
+    font-weight: 800;
+    font-stretch: 125%;
+    font-size: 1.25em;
+    letter-spacing: 0.02em;
+    background: linear-gradient(90deg, #fff, #bff5dc);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+  .logo-sub {
+    font-family: var(--font-sans);
+    font-weight: 600;
+    font-size: 0.5em;
+    letter-spacing: 0.34em;
+    color: #cfe3ff;
+  }
+</style>

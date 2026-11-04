@@ -1,0 +1,76 @@
+---
+import Section from '../ui/Section.astro';
+import Eyebrow from '../ui/Eyebrow.astro';
+import Reveal from '../ui/Reveal.astro';
+import VerbChip from '../ui/VerbChip.astro';
+import GlassCard from '../ui/GlassCard.astro';
+import Icon from '../ui/Icon.astro';
+import ServiceCard from '../services/ServiceCard.astro';
+import { servicesByVerb, servicesById, verbs, type Verb } from '../../data/services';
+
+const grouped = servicesByVerb();
+const cols: Verb[] = ['piensa', 'protege', 'escala'];
+const build = servicesById.build;
+---
+
+<Section bg="aurora">
+  <Reveal class="flex flex-col gap-4">
+    <Eyebrow>Servicios</Eyebrow>
+    <h2 class="text-h2 max-w-4xl text-balance">
+      Tecnología que <span style={`color:${verbs.piensa.color}`}>piensa</span>,
+      <span style={`color:${verbs.protege.color}`}>protege</span> y
+      <span style={`color:${verbs.escala.color}`}>escala</span>
+    </h2>
+  </Reveal>
+
+  <div class="mt-10 grid gap-x-6 gap-y-10 lg:grid-cols-3">
+    {
+      cols.map((verb, i) => (
+        <Reveal delay={i * 100}>
+          <div class="flex h-full flex-col gap-4">
+            <VerbChip verb={verb} class="self-start" />
+            <ul class="flex flex-1 flex-col gap-4">
+              {grouped[verb].map((s) => (
+                <li class="flex-1"><ServiceCard service={s} as="div" /></li>
+              ))}
+            </ul>
+          </div>
+        </Reveal>
+      ))
+    }
+  </div>
+
+  <!-- Líneas de luz: conectan cada columna con la base -->
+  <div class="hidden h-12 grid-cols-3 gap-x-6 lg:grid" aria-hidden="true">
+    {
+      cols.map((verb) => (
+        <div class="flex justify-center">
+          <span class="w-px" style={`background:linear-gradient(${verbs[verb].color},${verbs.base.color});box-shadow:0 0 10px ${verbs[verb].color}`} />
+        </div>
+      ))
+    }
+  </div>
+
+  <Reveal delay={200} class="mt-10 lg:mt-0">
+    <GlassCard accent={build.accent} class="flex flex-col gap-5 sm:flex-row sm:items-center sm:gap-8" >
+      <span
+        class="flex size-14 shrink-0 items-center justify-center rounded-xl"
+        style={`color:${build.accent};background:color-mix(in srgb, ${build.accent} 14%, transparent);border:1px solid color-mix(in srgb, ${build.accent} 35%, transparent)`}
+      >
+        <Icon svg={build.icon} class="size-7" />
+      </span>
+      <div class="flex-1">
+        <h3 class="text-h3">{verbs.base.label}: {build.brand}</h3>
+        <p class="mt-1 text-sm font-medium text-text-muted">{build.descriptor}</p>
+        <p class="mt-2 text-text-muted">{build.summary}</p>
+      </div>
+      <a href={build.slug} class="w-fit font-semibold" style={`color:${build.accent}`} aria-label={`Conocer más sobre ${build.brand}`}>
+        Conocer más →
+      </a>
+    </GlassCard>
+  </Reveal>
+
+  <Reveal delay={300}>
+    <p class="mt-6 text-center text-sm text-text-muted">La IA puede integrarse dentro de cualquiera de nuestros servicios.</p>
+  </Reveal>
+</Section>

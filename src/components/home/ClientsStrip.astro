@@ -1,0 +1,84 @@
+---
+import Section from '../ui/Section.astro';
+import Eyebrow from '../ui/Eyebrow.astro';
+import Reveal from '../ui/Reveal.astro';
+import ClientLogo from '../clients/ClientLogo.astro';
+import { clients } from '../../data/clients';
+---
+
+<Section bg="none" class="clients-strip">
+  <Reveal class="mb-8 flex flex-col items-center text-center">
+    <Eyebrow>Confían en nosotros</Eyebrow>
+    <h2 class="sr-only">Organizaciones que confían en Vertex Quant Labs</h2>
+  </Reveal>
+  <Reveal delay={100}>
+    <div class="marquee" tabindex="0" role="group" aria-label="Organizaciones que confían en nosotros">
+      <div class="track">
+        <ul class="list">
+          {clients.map((c) => <li class="item"><ClientLogo client={c} /></li>)}
+        </ul>
+        <ul class="list copy" aria-hidden="true">
+          {clients.map((c) => <li class="item"><ClientLogo client={c} /></li>)}
+        </ul>
+      </div>
+    </div>
+  </Reveal>
+</Section>
+
+<style>
+  .marquee {
+    overflow: hidden;
+    -webkit-mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent);
+    mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent);
+  }
+  .track {
+    display: flex;
+    width: max-content;
+    animation: marquee 45s linear infinite;
+  }
+  .marquee:hover .track,
+  .marquee:focus-within .track,
+  .marquee:focus .track {
+    animation-play-state: paused;
+  }
+  .list {
+    display: flex;
+    flex-shrink: 0;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+  .item {
+    width: 200px;
+    margin-right: 1rem;
+    display: flex;
+    justify-content: center;
+  }
+  @keyframes marquee {
+    to {
+      transform: translateX(-50%);
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .marquee {
+      -webkit-mask-image: none;
+      mask-image: none;
+    }
+    .track {
+      width: auto;
+      animation: none;
+    }
+    .copy {
+      display: none;
+    }
+    .list {
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 1rem;
+    }
+    .item {
+      margin: 0;
+      width: 180px;
+    }
+  }
+</style>

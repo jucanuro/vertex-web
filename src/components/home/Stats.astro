@@ -1,0 +1,30 @@
+---
+import Section from '../ui/Section.astro';
+import Reveal from '../ui/Reveal.astro';
+import { company } from '../../data/company';
+---
+
+<Section bg="none">
+  <h2 class="sr-only">Vertex Quant Labs en cifras</h2>
+  <dl class="grid grid-cols-2 gap-x-6 gap-y-10 text-center lg:grid-cols-4">
+    {
+      company.stats.map((s, i) => (
+        <Reveal delay={i * 100}>
+          <div class="flex flex-col-reverse gap-2">
+            <dt class="text-sm text-text-muted text-balance">{s.label}</dt>
+            <dd
+              class="text-gradient font-mono text-[clamp(2.25rem,1.6rem+2.8vw,4rem)] leading-none font-bold tabular-nums"
+              data-count={typeof s.value === 'number' ? s.value : undefined}
+            >
+              {s.value}
+            </dd>
+          </div>
+        </Reveal>
+      ))
+    }
+  </dl>
+</Section>
+
+<script>
+  import '../../scripts/counters';
+</script>

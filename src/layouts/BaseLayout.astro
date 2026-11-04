@@ -1,0 +1,71 @@
+---
+import { ClientRouter } from 'astro:transitions';
+import '../styles/global.css';
+import archivoLatin from '../../node_modules/@fontsource-variable/archivo/files/archivo-latin-wdth-normal.woff2?url';
+import Header from '../components/layout/Header.astro';
+import Footer from '../components/layout/Footer.astro';
+import WhatsAppButton from '../components/ui/WhatsAppButton.astro';
+import { allowIndexing } from '../lib/env';
+
+interface Props {
+  title: string;
+  description: string;
+  image?: string;
+  noindex?: boolean;
+  lang?: 'es' | 'en';
+  /** Uno o varios objetos JSON-LD de la página */
+  jsonLd?: Record<string, unknown> | Record<string, unknown>[];
+}
+const { title, description, image, noindex = false, lang = 'es', jsonLd } = Astro.props;
+const fullTitle = `${title} | Vertex Quant Labs`;
+const canonical = new URL(Astro.url.pathname, Astro.site).href;
+const jsonLdList = jsonLd ? (Array.isArray(jsonLd) ? jsonLd : [jsonLd]) : [];
+const imageUrl = image ? new URL(image, Astro.site).href : undefined; // TODO: imagen OG por defecto
+---
+
+<!doctype html>
+<html lang={lang}>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{fullTitle}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+    {(noindex || !allowIndexing) && <meta name="robots" content="noindex, nofollow" />}
+    <meta name="theme-color" content="#050B14" />
+
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <link rel="preload" href={archivoLatin} as="font" type="font/woff2" crossorigin />
+
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="Vertex Quant Labs" />
+    <meta property="og:title" content={fullTitle} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:locale" content={lang === 'es' ? 'es_PE' : 'en_US'} />
+    {imageUrl && <meta property="og:image" content={imageUrl} />}
+    <meta name="twitter:card" content={imageUrl ? 'summary_large_image' : 'summary'} />
+    <meta name="twitter:title" content={fullTitle} />
+    <meta name="twitter:description" content={description} />
+    {imageUrl && <meta name="twitter:image" content={imageUrl} />}
+
+    {jsonLdList.map((item) => <script is:inline type="application/ld+json" set:html={JSON.stringify(item)} />)}
+    <slot name="head" />
+    <ClientRouter />
+  </head>
+  <body>
+    <a
+      href="#contenido"
+      class="sr-only focus:not-sr-only focus:fixed focus:top-3 focus:left-3 focus:z-[60] focus:rounded-md focus:bg-primary focus:px-4 focus:py-2 focus:font-semibold focus:text-bg-950"
+    >
+      Saltar al contenido
+    </a>
+    <Header lang={lang} />
+    <main id="contenido">
+      <slot />
+    </main>
+    <Footer lang={lang} />
+    <WhatsAppButton />
+  </body>
+</html>

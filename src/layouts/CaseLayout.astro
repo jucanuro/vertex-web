@@ -1,0 +1,112 @@
+---
+import BaseLayout from './BaseLayout.astro';
+import PageHero from '../components/templates/PageHero.astro';
+import CTABlock from '../components/templates/CTABlock.astro';
+import Section from '../components/ui/Section.astro';
+import SectionHeading from '../components/ui/SectionHeading.astro';
+import Reveal from '../components/ui/Reveal.astro';
+import GlassCard from '../components/ui/GlassCard.astro';
+import { servicesById } from '../data/services';
+import { products } from '../data/products';
+import { seo } from '../data/seo';
+import { company } from '../data/company';
+import type { CaseStudy } from '../data/cases';
+
+interface Props {
+  item: CaseStudy;
+}
+const { item: c } = Astro.props;
+const path = `/casos/${c.id}/`;
+const meta = seo[path as keyof typeof seo];
+const name = c.shortName ?? c.name;
+const ownProduct = c.kind === 'producto propio' ? products[c.id as keyof typeof products] : undefined;
+const last = (c.stages?.length ?? 0) - 1;
+
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'CreativeWork',
+  name: `Caso: ${name}`,
+  description: `${c.challenge} ${c.result}`,
+  url: new URL(path, Astro.site).href,
+  creator: { '@type': 'Organization', name: company.name, url: Astro.site!.origin },
+};
+
+const blocks = [
+  { id: 'reto', label: 'Reto', text: c.challenge },
+  { id: 'solucion', label: 'Solución', text: c.solution },
+  { id: 'resultado', label: 'Resultado', text: c.result },
+];
+---
+
+<BaseLayout title={meta.title} description={meta.description} jsonLd={jsonLd}>
+  <PageHero
+    eyebrow={c.kind === 'producto propio' ? 'Producto propio' : 'Caso de éxito'}
+    title={`${name}: ${c.result.replace(/\.$/, '')}`}
+    subtitle={c.name !== name ? c.name : undefined}
+    breadcrumbs={[{ label: 'Casos', href: '/casos/' }, { label: name }]}
+    bg="grid"
+  />
+
+  <Section bg="none">
+    <dl class="glass grid gap-6 rounded-2xl p-6 sm:grid-cols-3">
+      <div>
+        <dt class="font-mono text-xs tracking-widest text-primary uppercase">Sector</dt>
+        <dd class="mt-1">{c.sector}</dd>
+      </div>
+      {
+        c.location && (
+          <div>
+            <dt class="font-mono text-xs tracking-widest text-primary uppercase">Lugar</dt>
+            <dd class="mt-1">{c.location}</dd>
+          </div>
+        )
+      }
+      <div>
+        <dt class="font-mono text-xs tracking-widest text-primary uppercase">Servicios</dt>
+        <dd class="mt-1 flex flex-wrap gap-x-3 gap-y-1">
+          {c.services.map((id) => <a href={servicesById[id].slug} class="font-semibold underline-offset-4 hover:underline" style={`color:${servicesById[id].accent}`}>{servicesById[id].brand}</a>)}
+        </dd>
+      </div>
+    </dl>
+  </Section>
+
+  <Section bg="alt">
+    <div class="grid gap-6 lg:grid-cols-3">
+      {
+        blocks.map((b, i) => (
+          <Reveal delay={i * 100} class="h-full">
+            <GlassCard as="div" class="flex h-full flex-col gap-3">
+              <h2 class="text-h3">{b.label}</h2>
+              <p class="text-text-muted">{b.text}</p>
+            </GlassCard>
+          </Reveal>
+        ))
+      }
+    </div>
+    {ownProduct && <p class="mt-8"><a href={ownProduct.slug} class="font-semibold text-primary underline-offset-4 hover:underline">Conocer {ownProduct.name} →</a></p>}
+  </Section>
+
+  {
+    c.stages && c.stages.length > 0 && (
+      <Section bg="none">
+        <Reveal><SectionHeading eyebrow="Etapas" title="Cómo fue creciendo" /></Reveal>
+        <ol class="mt-10 grid gap-4 md:grid-cols-4">
+          {
+            c.stages.map((s, i) => (
+              <li>
+                <Reveal delay={i * 100} class="h-full">
+                  <GlassCard as="div" class="flex h-full flex-col gap-2 !p-5">
+                    <span class="text-gradient font-mono text-3xl font-bold" aria-hidden="true">{String(i + 1).padStart(2, '0')}</span>
+                    <h3 class="text-lg leading-snug">{i === last ? 'Siguiente etapa' : s}</h3>
+                  </GlassCard>
+                </Reveal>
+              </li>
+            ))
+          }
+        </ol>
+      </Section>
+    )
+  }
+
+  <CTABlock audience="empresas" />
+</BaseLayout>

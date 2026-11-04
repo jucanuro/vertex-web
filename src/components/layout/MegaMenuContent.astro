@@ -1,0 +1,44 @@
+---
+import Badge from '../ui/Badge.astro';
+import { megaColumns } from '../../data/navigation';
+---
+
+<div class="grid gap-x-6 gap-y-6 sm:grid-cols-2 lg:grid-cols-4">
+  {
+    megaColumns.map((col) => (
+      <div>
+        <p class="mb-3 px-3 font-mono text-xs font-medium tracking-[0.18em] uppercase" style={`color:${col.color}`}>
+          {col.title}
+        </p>
+        <ul class="flex flex-col gap-1">
+          {col.items.map((s) => {
+            const soon = s.status === 'proximamente';
+            const inner = (
+              <>
+                <span class="mt-[0.45rem] size-2 flex-none rounded-full" style={`background:${s.accent};box-shadow:0 0 8px ${s.accent}`} aria-hidden="true" />
+                <span class="flex flex-col">
+                  <span class="flex flex-wrap items-center gap-2 text-sm font-semibold text-text">
+                    {s.brand}
+                    {soon && <Badge variant="soon" />}
+                  </span>
+                  <span class="text-xs text-text-muted">{s.descriptor}</span>
+                </span>
+              </>
+            );
+            return (
+              <li>
+                {soon ? (
+                  <div class="flex gap-3 rounded-lg p-3 opacity-80">{inner}</div>
+                ) : (
+                  <a href={s.slug} class="mega-item flex gap-3 rounded-lg p-3 transition-colors hover:bg-white/5 focus-visible:bg-white/5">
+                    {inner}
+                  </a>
+                )}
+              </li>
+            );
+          })}
+        </ul>
+      </div>
+    ))
+  }
+</div>

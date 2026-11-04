@@ -1,0 +1,89 @@
+---
+import BaseLayout from './BaseLayout.astro';
+import PageHero from '../components/templates/PageHero.astro';
+import CTABlock from '../components/templates/CTABlock.astro';
+import Section from '../components/ui/Section.astro';
+import SectionHeading from '../components/ui/SectionHeading.astro';
+import Reveal from '../components/ui/Reveal.astro';
+import GlassCard from '../components/ui/GlassCard.astro';
+import Badge from '../components/ui/Badge.astro';
+import Button from '../components/ui/Button.astro';
+import Icon from '../components/ui/Icon.astro';
+import ImagePlaceholder from '../components/ui/ImagePlaceholder.astro';
+import { products, type Product } from '../data/products';
+import { seo } from '../data/seo';
+import { company, whatsappLink } from '../data/company';
+
+interface Props {
+  id: keyof typeof products;
+}
+const { id } = Astro.props;
+const p: Product = products[id];
+const meta = seo[p.slug as keyof typeof seo];
+const operating = id === 'qhalisys';
+const wa = whatsappLink(`Hola, quiero conocer ${p.name}`);
+
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'SoftwareApplication',
+  name: p.name,
+  description: p.description,
+  url: new URL(p.slug, Astro.site).href,
+  provider: { '@type': 'Organization', name: company.name, url: Astro.site!.origin },
+};
+---
+
+<BaseLayout title={meta.title} description={meta.description} jsonLd={jsonLd}>
+  <PageHero
+    eyebrow="Plataforma propia"
+    title={`${p.name}: ${id === 'qhalisys' ? 'el sistema para tu farmacia' : 'reserva tu cancha en línea'}`}
+    highlight={p.name}
+    subtitle={p.description}
+    breadcrumbs={[{ label: 'Servicios', href: '/servicios/' }, { label: 'Vertex Platforms', href: '/servicios/sistemas-saas/' }, { label: p.name }]}
+  >
+    {operating && <Badge>En operación</Badge>}
+    <Button href={wa} variant="primary" size="lg" target="_blank" rel="noopener noreferrer">Escríbenos por WhatsApp</Button>
+  </PageHero>
+
+  <Section bg="none">
+    <div class="grid gap-6 md:grid-cols-2">
+      <Reveal class="h-full">
+        <GlassCard as="div" class="flex h-full flex-col gap-3">
+          <h2 class="text-h3">Para quién es</h2>
+          <p class="text-text-muted">{p.audience}</p>
+        </GlassCard>
+      </Reveal>
+      <Reveal delay={100} class="h-full">
+        <GlassCard as="div" class="flex h-full flex-col gap-3">
+          <h2 class="text-h3">Qué resuelve</h2>
+          <p class="text-text-muted">{p.solves}</p>
+        </GlassCard>
+      </Reveal>
+    </div>
+    {p.status && <p class="mt-6 text-sm text-text-muted">Estado: {p.status}.</p>}
+  </Section>
+
+  <Section bg="alt">
+    <Reveal><SectionHeading eyebrow={p.name} title="Funciones" /></Reveal>
+    <ul class="mt-10 grid gap-4 sm:grid-cols-2">
+      {
+        p.features.map((f, i) => (
+          <li>
+            <Reveal delay={i * 80} class="h-full">
+              <GlassCard as="div" class="flex h-full items-start gap-3 !p-5">
+                <span class="mt-0.5 flex-none text-primary"><Icon svg={'<path d="m5 12.5 4.5 4.5L19 7.5"/>'} class="size-5" /></span>
+                <span>{f}</span>
+              </GlassCard>
+            </Reveal>
+          </li>
+        ))
+      }
+    </ul>
+  </Section>
+
+  <Section bg="none">
+    <Reveal><ImagePlaceholder ratio="16 / 9" label={`Espacio para captura: ${p.name}`} /></Reveal>
+  </Section>
+
+  <CTABlock audience="negocios" title={`¿Quieres conocer ${p.name}? Escríbenos.`} text="Te respondemos por WhatsApp." whatsapp={wa} />
+</BaseLayout>

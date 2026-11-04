@@ -1,0 +1,45 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import PageHero from '../../components/templates/PageHero.astro';
+import CTABlock from '../../components/templates/CTABlock.astro';
+import Section from '../../components/ui/Section.astro';
+import SectionHeading from '../../components/ui/SectionHeading.astro';
+import Reveal from '../../components/ui/Reveal.astro';
+import ServiceCard from '../../components/services/ServiceCard.astro';
+import { servicesByVerb, verbs, type Verb } from '../../data/services';
+import { seo } from '../../data/seo';
+
+const meta = seo['/servicios/'];
+const groups = servicesByVerb();
+const intro: Record<Verb, string> = {
+  piensa: 'Datos e IA para decidir mejor.',
+  protege: 'Seguridad desde el primer día.',
+  escala: 'Plataformas que crecen contigo.',
+  base: 'Software a medida: la base de todo lo demás.',
+};
+const order: Verb[] = ['piensa', 'protege', 'escala', 'base'];
+const title = (v: Verb) => (v === 'base' ? 'La base: Vertex Build' : verbs[v].label);
+---
+
+<BaseLayout title={meta.title} description={meta.description}>
+  <PageHero
+    eyebrow="Servicios"
+    title="Servicios de software, datos, IA y ciberseguridad"
+    highlight="software, datos, IA y ciberseguridad"
+    subtitle="Tecnología que piensa, protege y escala, con Vertex Build como base."
+    breadcrumbs={[{ label: 'Servicios' }]}
+  />
+  {
+    order.map((v, gi) => (
+      <Section bg={gi % 2 === 1 ? 'alt' : 'none'} id={v}>
+        <Reveal>
+          <SectionHeading eyebrow={verbs[v].label} title={title(v)} subtitle={intro[v]} />
+        </Reveal>
+        <ul class="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+          {groups[v].map((s, i) => <li><Reveal delay={i * 100} class="h-full"><ServiceCard service={s} as="div" /></Reveal></li>)}
+        </ul>
+      </Section>
+    ))
+  }
+  <CTABlock audience="empresas" />
+</BaseLayout>

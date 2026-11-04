@@ -1,0 +1,73 @@
+---
+import Section from '../ui/Section.astro';
+import SectionHeading from '../ui/SectionHeading.astro';
+import Reveal from '../ui/Reveal.astro';
+import GlassCard from '../ui/GlassCard.astro';
+import Button from '../ui/Button.astro';
+import Icon from '../ui/Icon.astro';
+
+const paths = [
+  {
+    title: 'Para negocios y emprendedores',
+    gradient: 'var(--gradient-negocios)',
+    accent: '#22d3ee',
+    points: [
+      'Funciona desde tu celular',
+      'Facturación electrónica incluida',
+      'Boleta por WhatsApp y mini ticketera',
+      'Sin comprar computadoras por sucursal',
+    ],
+    cta: 'Ver soluciones para negocios',
+    href: '/negocios/',
+    variant: 'primary' as const,
+  },
+  {
+    title: 'Para empresas e instituciones',
+    gradient: 'var(--gradient-empresas)',
+    accent: '#8b5cf6',
+    points: [
+      'Sistemas a medida de tu proceso',
+      'Datos y dashboards para decidir',
+      'IA aplicada donde aporta valor',
+      'Diagnóstico previo sin costo',
+    ],
+    cta: 'Agenda tu diagnóstico',
+    href: '/contacto/',
+    variant: 'secondary' as const,
+  },
+];
+const check = '<path d="m5 12.5 4.5 4.5L19 7.5"/>';
+---
+
+<Section bg="grid">
+  <Reveal>
+    <SectionHeading title="Elige tu camino" />
+  </Reveal>
+  <div class="mt-10 grid gap-6 md:grid-cols-2">
+    {
+      paths.map((p, i) => (
+        <Reveal delay={i * 100} class="h-full">
+          <GlassCard accent={p.accent} as="article" class="flex h-full flex-col gap-6 !p-0">
+            <div class="h-1.5" style={`background:${p.gradient}`} aria-hidden="true" />
+            <div class="flex h-full flex-col gap-6 p-6 sm:p-8">
+              <h3 class="text-h3 text-balance">{p.title}</h3>
+              <ul class="flex flex-col gap-3">
+                {p.points.map((t) => (
+                  <li class="flex items-start gap-3 text-text-muted">
+                    <span class="mt-1 flex size-5 shrink-0 items-center justify-center rounded-full" style={`color:${p.accent};background:color-mix(in srgb, ${p.accent} 15%, transparent)`}>
+                      <Icon svg={check} class="size-3.5" />
+                    </span>
+                    {t}
+                  </li>
+                ))}
+              </ul>
+              <div class="mt-auto pt-2">
+                <Button href={p.href} variant={p.variant} size="lg" class="max-sm:w-full max-sm:!whitespace-normal">{p.cta}</Button>
+              </div>
+            </div>
+          </GlassCard>
+        </Reveal>
+      ))
+    }
+  </div>
+</Section>

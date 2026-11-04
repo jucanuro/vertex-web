@@ -1,0 +1,25 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import LogoMark from '../components/brand/LogoMark.astro';
+import Button from '../components/ui/Button.astro';
+import { company } from '../data/company';
+import { seo } from '../data/seo';
+
+const meta = seo['/404/'];
+---
+
+<BaseLayout title={meta.title} description={meta.description} noindex>
+  <section class="relative isolate flex min-h-[80svh] items-center justify-center overflow-hidden px-5 text-center" style="padding-block:calc(var(--header-h) + 3rem) 4rem">
+    <div class="bg-aurora absolute inset-0 -z-10" aria-hidden="true"></div>
+    <div class="flex max-w-2xl flex-col items-center gap-6">
+      <LogoMark uid="nf" class="h-24" />
+      <h1 class="text-h1 text-balance">Esta página <span class="text-gradient">no existe</span></h1>
+      <p class="text-lg text-text-muted">{company.slogan}</p>
+      <div class="mt-2 flex flex-col items-stretch gap-3 sm:flex-row sm:flex-wrap sm:justify-center">
+        <Button href="/negocios/" variant="primary" size="md">Para negocios</Button>
+        <Button href="/empresas/" variant="primary" size="md">Para empresas</Button>
+        <Button href="/servicios/" variant="secondary" size="md">Servicios</Button>
+      </div>
+    </div>
+  </section>
+</BaseLayout>

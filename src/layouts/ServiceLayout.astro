@@ -1,0 +1,234 @@
+---
+import BaseLayout from './BaseLayout.astro';
+import PageHero from '../components/templates/PageHero.astro';
+import CTABlock from '../components/templates/CTABlock.astro';
+import CaseCard from '../components/templates/CaseCard.astro';
+import Section from '../components/ui/Section.astro';
+import SectionHeading from '../components/ui/SectionHeading.astro';
+import Reveal from '../components/ui/Reveal.astro';
+import GlassCard from '../components/ui/GlassCard.astro';
+import Button from '../components/ui/Button.astro';
+import Badge from '../components/ui/Badge.astro';
+import Icon from '../components/ui/Icon.astro';
+import ImagePlaceholder from '../components/ui/ImagePlaceholder.astro';
+import ServiceCard from '../components/services/ServiceCard.astro';
+import Process from '../components/home/Process.astro';
+import { servicesById, type ServiceId } from '../data/services';
+import { servicePages, contractingForms, guarantee } from '../data/service-pages';
+import { products } from '../data/products';
+import { cases } from '../data/cases';
+import { pillars } from '../data/pillars';
+import { seo } from '../data/seo';
+import { company, whatsappLink } from '../data/company';
+
+interface Props {
+  id: ServiceId;
+}
+const { id } = Astro.props;
+const service = servicesById[id];
+const page = servicePages[id];
+const meta = seo[service.slug as keyof typeof seo];
+const soon = service.status === 'proximamente';
+const serviceCases = (page.caseIds ?? []).map((cid) => cases.find((c) => c.id === cid)!);
+const related = page.related.map((rid) => servicesById[rid]);
+const purpose = pillars.find((p) => p.id === 'ia-con-proposito')!;
+
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'Service',
+  name: service.brand,
+  serviceType: service.descriptor,
+  description: meta.description,
+  url: new URL(service.slug, Astro.site).href,
+  provider: { '@type': 'Organization', name: company.name, url: Astro.site!.origin },
+  areaServed: ['PE', 'CL', 'ES'],
+};
+const chainWa = whatsappLink('Hola, quiero que me avisen cuando Vertex Chain esté listo');
+---
+
+<BaseLayout title={meta.title} description={meta.description} jsonLd={jsonLd}>
+  <PageHero
+    eyebrow={service.brand}
+    accent={service.accent}
+    title={page.h1}
+    highlight={page.highlight}
+    subtitle={page.subtitle}
+    breadcrumbs={[{ label: 'Servicios', href: '/servicios/' }, { label: service.brand }]}
+  >
+    {soon && <Badge variant="soon" />}
+    {
+      soon ? (
+        <Button href={chainWa} variant="primary" size="lg" target="_blank" rel="noopener noreferrer">Avísame cuando esté listo</Button>
+      ) : (
+        <>
+          <Button href="/contacto/" variant="primary" size="lg">Agenda tu diagnóstico sin costo</Button>
+          <Button href="#como-trabajamos" variant="secondary" size="lg">Cómo trabajamos</Button>
+        </>
+      )
+    }
+  </PageHero>
+
+  {
+    page.problem && (
+      <Section bg="none">
+        <Reveal>
+          <SectionHeading eyebrow="El problema" title={page.problem.title} />
+          <p class="mt-6 max-w-2xl text-lg text-text-muted">{page.problem.text}</p>
+        </Reveal>
+      </Section>
+    )
+  }
+
+  {
+    page.idea && (
+      <Section bg="none">
+        <Reveal>
+          <SectionHeading eyebrow="Nuestro enfoque" title={page.idea} />
+        </Reveal>
+      </Section>
+    )
+  }
+
+  {
+    page.includes && (
+      <Section bg="alt">
+        <Reveal><SectionHeading eyebrow={service.brand} title={page.includes.title} /></Reveal>
+        <ul class="mt-10 grid gap-4 sm:grid-cols-2">
+          {
+            page.includes.items.map((item, i) => (
+              <li>
+                <Reveal delay={i * 80} class="h-full">
+                  <GlassCard as="div" accent={service.accent} class="flex h-full items-start gap-3 !p-5">
+                    <span class="mt-0.5 flex-none" style={`color:${service.accent}`}>
+                      <Icon svg={'<path d="m5 12.5 4.5 4.5L19 7.5"/>'} class="size-5" />
+                    </span>
+                    <span>{item}</span>
+                  </GlassCard>
+                </Reveal>
+              </li>
+            ))
+          }
+        </ul>
+      </Section>
+    )
+  }
+
+  {
+    page.purposeBlock && (
+      <Section bg="none">
+        <Reveal>
+          <div class="glass rounded-3xl p-8 sm:p-12">
+            <SectionHeading eyebrow="Nuestro pilar" title={purpose.title} />
+            <p class="mt-5 max-w-2xl text-lg text-text-muted">{purpose.description}</p>
+          </div>
+        </Reveal>
+      </Section>
+    )
+  }
+
+  {
+    page.productIds && (
+      <Section bg="none">
+        <Reveal><SectionHeading eyebrow="Plataformas" title="Plataformas que creamos y operamos" /></Reveal>
+        <ul class="mt-10 grid gap-6 md:grid-cols-2">
+          {
+            page.productIds.map((pid, i) => {
+              const p = products[pid];
+              return (
+                <li>
+                  <Reveal delay={i * 100} class="h-full">
+                    <GlassCard as="div" accent={service.accent} class="flex h-full flex-col gap-3">
+                      <div class="flex flex-wrap items-center gap-3">
+                        <h3 class="text-h3">{p.name}</h3>
+                        {pid === 'qhalisys' && <Badge>En operación</Badge>}
+                      </div>
+                      <p class="text-sm text-text-muted">{p.description}</p>
+                      <a href={p.slug} aria-label={`Conocer ${p.name}`} class="mt-auto w-fit pt-2 text-sm font-semibold text-primary underline-offset-4 hover:underline">
+                        Conocer {p.name} →
+                      </a>
+                    </GlassCard>
+                  </Reveal>
+                </li>
+              );
+            })
+          }
+        </ul>
+      </Section>
+    )
+  }
+
+  {
+    page.placeholder && (
+      <Section bg="none">
+        <Reveal>
+          <ImagePlaceholder ratio="21 / 9" label={page.placeholder} />
+        </Reveal>
+      </Section>
+    )
+  }
+
+  {
+    page.process && (
+      <div id="como-trabajamos"><Process /></div>
+    )
+  }
+
+  {
+    page.contracting && (
+      <Section bg="alt">
+        <Reveal><SectionHeading eyebrow="Formas de contratar" title="Elige cómo trabajar con nosotros" /></Reveal>
+        <ul class="mt-10 grid gap-5 md:grid-cols-3">
+          {
+            contractingForms.map((f, i) => (
+              <li>
+                <Reveal delay={i * 100} class="h-full">
+                  <GlassCard as="div" accent={service.accent} class="flex h-full flex-col gap-2">
+                    <h3 class="text-h3">{f.title}</h3>
+                    <p class="text-sm text-text-muted">{f.text}</p>
+                  </GlassCard>
+                </Reveal>
+              </li>
+            ))
+          }
+        </ul>
+        <Reveal class="mt-10">
+          <div class="glass flex items-start gap-4 rounded-2xl p-6" style={`border-color:color-mix(in srgb, ${service.accent} 45%, transparent)`}>
+            <span class="mt-1 flex-none" style={`color:${service.accent}`}>
+              <Icon svg={'<path d="M12 3l8 3v6c0 4.5-3.2 7.8-8 9-4.8-1.2-8-4.5-8-9V6z"/><path d="m8.5 12 2.5 2.5 4.5-5"/>'} />
+            </span>
+            <div>
+              <h3 class="text-h3">Garantía</h3>
+              <p class="mt-2 text-text-muted">{guarantee}</p>
+            </div>
+          </div>
+        </Reveal>
+      </Section>
+    )
+  }
+
+  {
+    serviceCases.length > 0 && (
+      <Section bg="none">
+        <Reveal><SectionHeading eyebrow="Casos" title={serviceCases.length > 1 ? 'Casos de este servicio' : 'Un caso de este servicio'} /></Reveal>
+        <ul class="mt-10 grid gap-6 md:grid-cols-2">
+          {serviceCases.map((c, i) => <li><Reveal delay={i * 100} class="h-full"><CaseCard item={c} as="div" /></Reveal></li>)}
+        </ul>
+      </Section>
+    )
+  }
+
+  <Section bg="alt">
+    <Reveal><SectionHeading eyebrow="Sigue explorando" title="También te puede interesar" /></Reveal>
+    <ul class="mt-10 grid gap-6 md:grid-cols-2">
+      {related.map((s, i) => <li><Reveal delay={i * 100} class="h-full"><ServiceCard service={s} as="div" /></Reveal></li>)}
+    </ul>
+  </Section>
+
+  {
+    soon ? (
+      <CTABlock audience="negocios" title="Te avisamos cuando esté listo" text="Escríbenos por WhatsApp y te contamos cuando Vertex Chain esté disponible." whatsapp={chainWa} whatsappLabel="Avísame cuando esté listo" />
+    ) : (
+      <CTABlock audience={service.audience === 'negocios' ? 'negocios' : 'empresas'} />
+    )
+  }
+</BaseLayout>

@@ -1,0 +1,35 @@
+---
+import BaseLayout from './BaseLayout.astro';
+import PageHero from '../components/templates/PageHero.astro';
+import Section from '../components/ui/Section.astro';
+import { seo, type SeoPath } from '../data/seo';
+
+interface Props {
+  path: SeoPath;
+  title: string;
+  sections: { heading: string; text: string }[];
+}
+const { path, title, sections } = Astro.props;
+const meta = seo[path];
+---
+
+<BaseLayout title={meta.title} description={meta.description} noindex>
+  <PageHero eyebrow="Legal" title={title} breadcrumbs={[{ label: title }]} bg="grid" />
+  <Section bg="none">
+    <div class="max-w-3xl">
+      <p role="note" class="mb-10 rounded-lg border border-chain/40 bg-chain/10 px-4 py-3 text-sm font-semibold">
+        Borrador: pendiente de revisión legal
+      </p>
+      <div class="flex flex-col gap-8">
+        {
+          sections.map((s) => (
+            <section>
+              <h2 class="text-h3">{s.heading}</h2>
+              <p class="mt-3 text-text-muted">{s.text}</p>
+            </section>
+          ))
+        }
+      </div>
+    </div>
+  </Section>
+</BaseLayout>

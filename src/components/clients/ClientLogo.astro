@@ -1,0 +1,74 @@
+---
+import Icon from '../ui/Icon.astro';
+import type { Client } from '../../data/clients';
+
+interface Props {
+  client: Client;
+  class?: string;
+}
+const { client, class: className } = Astro.props;
+
+const icons = {
+  institution: '<path d="M3 9.5 12 4l9 5.5"/><path d="M5 10v8M9.5 10v8M14.5 10v8M19 10v8M3 20h18"/>',
+  building: '<rect x="5" y="3" width="14" height="18" rx="1.5"/><path d="M9 7.5h2M13 7.5h2M9 11.5h2M13 11.5h2M10 21v-4h4v4"/>',
+};
+const icon = client.sector === 'Educación superior' ? icons.institution : icons.building;
+---
+
+<div
+  class:list={['client-logo', className]}
+  title={client.name}
+>
+  {
+    client.logo ? (
+      <img src={client.logo} alt={client.name} width="140" height="56" loading="lazy" decoding="async" class="client-img" />
+    ) : (
+      <>
+        <Icon svg={icon} class="size-7 text-text-muted" />
+        <span class="client-name">{client.name}</span>
+      </>
+    )
+  }
+</div>
+
+<style>
+  .client-logo {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 0.4rem;
+    width: 100%;
+    max-width: 200px;
+    height: 104px;
+    padding: 0.75rem;
+    text-align: center;
+    border-radius: var(--radius-lg);
+    background: var(--glass);
+    border: 1px solid var(--border);
+  }
+  .client-img {
+    width: 140px;
+    height: 56px;
+    object-fit: contain;
+    filter: grayscale(1);
+    opacity: 0.75;
+    transition:
+      filter 0.25s ease,
+      opacity 0.25s ease;
+  }
+  .client-logo:hover .client-img {
+    filter: none;
+    opacity: 1;
+  }
+  .client-name {
+    font-size: 0.75rem;
+    line-height: 1.25;
+    color: var(--color-text-muted);
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+</style>

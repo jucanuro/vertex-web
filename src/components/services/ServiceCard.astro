@@ -1,0 +1,50 @@
+---
+import GlassCard from '../ui/GlassCard.astro';
+import Badge from '../ui/Badge.astro';
+import Icon from '../ui/Icon.astro';
+import VerbChip from '../ui/VerbChip.astro';
+import type { Service } from '../../data/services';
+
+interface Props {
+  service: Service;
+  /** El descriptor es el texto SEO: h3 dentro de una sección con h2, p en otros contextos */
+  descriptorAs?: 'h3' | 'p';
+  as?: 'div' | 'article' | 'li';
+  class?: string;
+}
+const { service, descriptorAs: Descriptor = 'h3', as = 'article', class: className } = Astro.props;
+const soon = service.status === 'proximamente';
+---
+
+<GlassCard accent={service.accent} as={as} class:list={['flex h-full flex-col gap-4', soon && 'opacity-80', className]}>
+  <div class="flex items-start justify-between gap-3">
+    <span
+      class="flex size-11 items-center justify-center rounded-lg"
+      style={`color:${service.accent};background:color-mix(in srgb, ${service.accent} 14%, transparent);border:1px solid color-mix(in srgb, ${service.accent} 35%, transparent)`}
+    >
+      <Icon svg={service.icon} />
+    </span>
+    {soon && <Badge variant="soon" />}
+  </div>
+  <div>
+    <p class="font-display text-xl font-bold" style="font-stretch:var(--heading-stretch)">{service.brand}</p>
+    <Descriptor class="mt-1 text-sm font-medium text-text-muted" style="font-family:var(--font-sans);font-weight:500;font-stretch:100%;letter-spacing:0">{service.descriptor}</Descriptor>
+  </div>
+  {!soon && <p class="text-sm text-text-muted">{service.summary}</p>}
+  <div class="mt-auto flex flex-wrap items-center gap-2 pt-1">
+    <VerbChip verb={service.verb} />
+    {service.secondaryVerb && <VerbChip verb={service.secondaryVerb} />}
+  </div>
+  {
+    !soon && (
+      <a
+        href={service.slug}
+        aria-label={`Conocer más sobre ${service.brand}`}
+        class="w-fit text-sm font-semibold"
+        style={`color:${service.accent}`}
+      >
+        Conocer más →
+      </a>
+    )
+  }
+</GlassCard>

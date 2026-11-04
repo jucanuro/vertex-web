@@ -1,0 +1,52 @@
+---
+interface Props {
+  /** Color CSS de acento */
+  accent?: string;
+  as?: 'div' | 'article' | 'li';
+  class?: string;
+}
+const { accent = 'var(--color-primary)', as: Tag = 'div', class: className } = Astro.props;
+---
+
+<Tag class:list={['glass-card glass', className]} style={`--accent:${accent}`} data-spotlight>
+  <slot />
+</Tag>
+
+<style>
+  .glass-card {
+    position: relative;
+    overflow: hidden;
+    border-radius: var(--radius-xl);
+    padding: 1.5rem;
+    transition:
+      border-color 0.25s ease,
+      box-shadow 0.25s ease;
+  }
+  .glass-card::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.25s ease;
+    background: radial-gradient(
+      260px circle at var(--x, 50%) var(--y, 0%),
+      color-mix(in srgb, var(--accent) 22%, transparent),
+      transparent 70%
+    );
+  }
+  .glass-card:hover {
+    border-color: color-mix(in srgb, var(--accent) 45%, transparent);
+    box-shadow: 0 0 32px color-mix(in srgb, var(--accent) 16%, transparent);
+  }
+  .glass-card:hover::before {
+    opacity: 1;
+  }
+  .glass-card > :global(*) {
+    position: relative;
+  }
+</style>
+
+<script>
+  import '../../scripts/spotlight';
+</script>

@@ -1,0 +1,39 @@
+---
+import GlassCard from '../ui/GlassCard.astro';
+import type { CaseStudy } from '../../data/cases';
+import { servicesById } from '../../data/services';
+
+interface Props {
+  item: CaseStudy;
+  as?: 'div' | 'article' | 'li';
+  class?: string;
+}
+const { item: c, as = 'article', class: className } = Astro.props;
+---
+
+<GlassCard as={as} class:list={['flex h-full flex-col gap-4', className]}>
+  <header>
+    <p class="font-mono text-xs text-text-muted">{c.sector}{c.location && ` · ${c.location}`}</p>
+    <h3 class="text-h3 mt-2">{c.shortName ?? c.name}</h3>
+    {c.shortName && <p class="mt-1 text-sm text-text-muted">{c.name}</p>}
+  </header>
+  <p class="text-sm text-text-muted">{c.challenge}</p>
+  <ul class="mt-auto flex flex-wrap gap-2 pt-1">
+    {
+      c.services.map((id) => {
+        const s = servicesById[id];
+        return (
+          <li
+            class="rounded-full px-2.5 py-0.5 text-xs font-semibold"
+            style={`color:${s.accent};background:color-mix(in srgb, ${s.accent} 12%, transparent);border:1px solid color-mix(in srgb, ${s.accent} 35%, transparent)`}
+          >
+            {s.brand}
+          </li>
+        );
+      })
+    }
+  </ul>
+  <a href={`/casos/${c.id}/`} class="w-fit text-sm font-semibold text-primary underline-offset-4 hover:underline" aria-label={`Ver el caso ${c.shortName ?? c.name}`}>
+    Ver el caso →
+  </a>
+</GlassCard>

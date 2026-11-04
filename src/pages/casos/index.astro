@@ -1,0 +1,85 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import PageHero from '../../components/templates/PageHero.astro';
+import CTABlock from '../../components/templates/CTABlock.astro';
+import CaseCard from '../../components/templates/CaseCard.astro';
+import Section from '../../components/ui/Section.astro';
+import { cases } from '../../data/cases';
+import { servicesById, type ServiceId } from '../../data/services';
+import { seo } from '../../data/seo';
+
+const meta = seo['/casos/'];
+// Solo los servicios que tienen al menos un caso
+const filterIds = [...new Set(cases.flatMap((c) => c.services))] as ServiceId[];
+const filterCss = filterIds
+  .map((id) => `.cases:has(#f-${id}:checked) li[data-services]:not([data-services~="${id}"]){display:none}`)
+  .join('\n');
+---
+
+<BaseLayout title={meta.title} description={meta.description}>
+  <PageHero
+    eyebrow="Casos"
+    title="Proyectos que ya están funcionando"
+    highlight="ya están funcionando"
+    subtitle="Retos reales, soluciones a medida y resultados. Filtra por servicio."
+    breadcrumbs={[{ label: 'Casos' }]}
+    bg="grid"
+  />
+  <Section bg="none">
+    <div class="cases">
+      <fieldset class="filters">
+        <legend class="sr-only">Filtrar casos por servicio</legend>
+        <input type="radio" name="servicio" id="f-all" class="sr-only" checked />
+        <label for="f-all">Todos</label>
+        {
+          filterIds.map((id) => (
+            <>
+              <input type="radio" name="servicio" id={`f-${id}`} class="sr-only" />
+              <label for={`f-${id}`}>{servicesById[id].brand}</label>
+            </>
+          ))
+        }
+      </fieldset>
+      <ul class="grid gap-6 md:grid-cols-2 lg:grid-cols-3" aria-live="polite">
+        {cases.map((c) => <li data-services={c.services.join(' ')}><CaseCard item={c} as="div" /></li>)}
+      </ul>
+    </div>
+  </Section>
+  <CTABlock audience="empresas" />
+</BaseLayout>
+
+<style is:inline set:html={filterCss}></style>
+
+<style is:global>
+  .cases .filters {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-bottom: 2rem;
+    border: 0;
+    padding: 0;
+  }
+  .cases .filters label {
+    cursor: pointer;
+    padding: 0.4rem 1rem;
+    border-radius: 9999px;
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: var(--color-text-muted);
+    background: var(--glass);
+    border: 1px solid var(--border);
+    transition: color 0.2s ease, border-color 0.2s ease;
+  }
+  .cases .filters label:hover {
+    color: var(--color-text);
+  }
+  .cases .filters input:focus-visible + label {
+    outline: 2px solid var(--color-primary);
+    outline-offset: 3px;
+  }
+  .cases .filters input:checked + label {
+    color: var(--color-bg-950);
+    background: var(--gradient-brand);
+    border-color: transparent;
+  }
+</style>

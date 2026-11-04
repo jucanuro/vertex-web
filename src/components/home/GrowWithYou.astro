@@ -1,0 +1,150 @@
+---
+import Section from '../ui/Section.astro';
+import SectionHeading from '../ui/SectionHeading.astro';
+import Reveal from '../ui/Reveal.astro';
+import { cases } from '../../data/cases';
+
+interface Props {
+  /** Muestra el enlace a /crecemos-contigo/ (se oculta en esa misma página) */
+  showLink?: boolean;
+}
+const { showLink = true } = Astro.props;
+const stages = cases.find((c) => c.id === 'grupo-vicaf')?.stages ?? [];
+const last = stages.length - 1;
+---
+
+<Section bg="none">
+  <Reveal>
+    <SectionHeading eyebrow="Crecemos contigo" title="Empezamos por lo más urgente y crecemos por etapas" />
+  </Reveal>
+
+  <ol class="stages mt-14" data-stages>
+    {
+      stages.map((label, i) => (
+        <li class:list={['stage', i === last && 'stage-next']} data-stage style={`--i:${i}`}>
+          {i < last && <span class="seg" aria-hidden="true"><span class="fill" /></span>}
+          <span class="node" aria-hidden="true"><span class="num">{i + 1}</span></span>
+          <span class="label">{i === last ? 'Tu siguiente etapa' : label}</span>
+        </li>
+      ))
+    }
+  </ol>
+
+  {showLink && <Reveal class="mt-12">
+    <p class="text-center text-text-muted">
+      <a href="/crecemos-contigo/" class="font-semibold text-primary underline-offset-4 hover:underline">
+        El caso de Grupo VICAF: de su web comercial a un sistema de operaciones de laboratorio. →
+      </a>
+    </p>
+  </Reveal>}
+</Section>
+
+<style>
+  .stages {
+    --node: 2.5rem;
+    list-style: none;
+    padding: 0;
+    display: grid;
+  }
+  .stage {
+    position: relative;
+    display: flex;
+    align-items: flex-start;
+    gap: 1rem;
+    padding-bottom: 2.5rem;
+  }
+  .stage:last-child {
+    padding-bottom: 0;
+  }
+  .node {
+    position: relative;
+    z-index: 1;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: var(--node);
+    height: var(--node);
+    border-radius: 9999px;
+    font-family: var(--font-mono);
+    font-size: 0.875rem;
+    color: var(--color-bg-950);
+    background: var(--gradient-brand);
+    box-shadow: 0 0 20px rgb(34 211 238 / 0.45);
+    transition:
+      opacity 0.5s ease var(--d, 0s),
+      box-shadow 0.5s ease var(--d, 0s);
+  }
+  .stage-next .node {
+    background: var(--color-bg-950);
+    color: var(--color-primary);
+    border: 2px dashed var(--color-primary);
+    box-shadow: none;
+  }
+  .label {
+    padding-top: 0.5rem;
+    font-weight: 600;
+    transition: opacity 0.5s ease var(--d, 0s);
+  }
+  .stage-next .label {
+    color: var(--color-primary);
+  }
+  /* Segmento hacia la siguiente etapa (vertical en móvil) */
+  .seg {
+    position: absolute;
+    left: calc(var(--node) / 2 - 1px);
+    top: calc(var(--node) / 2);
+    height: 100%;
+    width: 2px;
+    background: var(--border);
+  }
+  .fill {
+    display: block;
+    width: 100%;
+    height: 100%;
+    background: var(--gradient-brand);
+    transform-origin: top;
+    transition: transform 0.6s ease var(--d, 0s);
+  }
+  @media (min-width: 768px) {
+    .stages {
+      grid-template-columns: repeat(4, 1fr);
+    }
+    .stage {
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      padding-bottom: 0;
+      gap: 1.25rem;
+    }
+    .label {
+      padding: 0 0.5rem;
+      text-wrap: balance;
+    }
+    .seg {
+      left: 50%;
+      top: calc(var(--node) / 2 - 1px);
+      height: 2px;
+      width: 100%;
+    }
+    .fill {
+      transform-origin: left;
+    }
+  }
+
+  /* Estado "apagado" solo cuando el script está activo (sin JS o reduced-motion todo visible) */
+  [data-armed] .stage {
+    --d: calc(var(--i) * 0.15s);
+  }
+  [data-armed] .stage:not(.is-on) .node,
+  [data-armed] .stage:not(.is-on) .label {
+    opacity: 0.3;
+  }
+  [data-armed] .stage:not(.is-on) .fill {
+    transform: scale(0);
+  }
+</style>
+
+<script>
+  import '../../scripts/stages';
+</script>

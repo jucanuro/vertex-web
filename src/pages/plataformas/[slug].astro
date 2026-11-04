@@ -1,0 +1,14 @@
+---
+import ProductLayout from '../../layouts/ProductLayout.astro';
+import { products } from '../../data/products';
+
+export function getStaticPaths() {
+  return Object.values(products).map((p) => ({
+    params: { slug: p.slug.split('/').filter(Boolean).pop()! },
+    props: { id: p.id as keyof typeof products },
+  }));
+}
+const { id } = Astro.props;
+---
+
+<ProductLayout id={id} />

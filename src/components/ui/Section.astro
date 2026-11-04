@@ -1,0 +1,24 @@
+---
+interface Props {
+  bg?: 'none' | 'grid' | 'aurora' | 'alt';
+  id?: string;
+  class?: string;
+}
+const { bg = 'none', id, class: className } = Astro.props;
+---
+
+<section id={id} class:list={['relative isolate', bg === 'alt' && 'bg-bg-900', className]}>
+  {
+    bg === 'grid' && (
+      <div
+        class="bg-grid absolute inset-0 -z-10"
+        style="mask-image:radial-gradient(ellipse at center,#000 30%,transparent 80%);-webkit-mask-image:radial-gradient(ellipse at center,#000 30%,transparent 80%)"
+        aria-hidden="true"
+      />
+    )
+  }
+  {bg === 'aurora' && <div class="bg-aurora absolute inset-0 -z-10" aria-hidden="true" />}
+  <div class="mx-auto w-full max-w-[1200px] px-5 sm:px-8" style="padding-block:clamp(4rem,2.5rem + 6vw,8rem)">
+    <slot />
+  </div>
+</section>

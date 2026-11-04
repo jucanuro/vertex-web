@@ -1,0 +1,63 @@
+---
+import Section from '../ui/Section.astro';
+import SectionHeading from '../ui/SectionHeading.astro';
+import Reveal from '../ui/Reveal.astro';
+import GlassCard from '../ui/GlassCard.astro';
+import { cases } from '../../data/cases';
+import { servicesById } from '../../data/services';
+
+const ids = ['instituto-san-pablo', 'instituto-san-miguel', 'grupo-vicaf'];
+const featured = ids.map((id) => cases.find((c) => c.id === id)!);
+const rows = [
+  ['Reto', 'challenge'],
+  ['Solución', 'solution'],
+  ['Resultado', 'result'],
+] as const;
+---
+
+<Section bg="grid">
+  <Reveal>
+    <SectionHeading eyebrow="Casos de éxito" title="Proyectos que ya están funcionando" />
+  </Reveal>
+  <div class="mt-10 grid gap-6 lg:grid-cols-3">
+    {
+      featured.map((c, i) => (
+        <Reveal delay={i * 100} class="h-full">
+          <GlassCard as="article" class="flex h-full flex-col gap-5">
+            <header>
+              <p class="font-mono text-xs text-text-muted">
+                {c.sector}{c.location && ` · ${c.location}`}
+              </p>
+              <h3 class="text-h3 mt-2">{c.shortName ?? c.name}</h3>
+              {c.shortName && <p class="mt-1 text-sm text-text-muted">{c.name}</p>}
+            </header>
+            <dl class="flex flex-col gap-4 text-sm">
+              {rows.map(([label, key]) => (
+                <div>
+                  <dt class="font-mono text-xs tracking-widest text-primary uppercase">{label}</dt>
+                  <dd class="mt-1 text-text-muted">{c[key]}</dd>
+                </div>
+              ))}
+            </dl>
+            <ul class="mt-auto flex flex-wrap gap-2 pt-2">
+              {c.services.map((id) => {
+                const s = servicesById[id];
+                return (
+                  <li
+                    class="rounded-full px-2.5 py-0.5 text-xs font-semibold"
+                    style={`color:${s.accent};background:color-mix(in srgb, ${s.accent} 12%, transparent);border:1px solid color-mix(in srgb, ${s.accent} 35%, transparent)`}
+                  >
+                    {s.brand}
+                  </li>
+                );
+              })}
+            </ul>
+          </GlassCard>
+        </Reveal>
+      ))
+    }
+  </div>
+  <Reveal class="mt-8">
+    <a href="/casos/" class="font-semibold text-primary underline-offset-4 hover:underline">Ver todos los casos →</a>
+  </Reveal>
+</Section>

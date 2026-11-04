@@ -1,0 +1,30 @@
+---
+import Section from '../ui/Section.astro';
+import SectionHeading from '../ui/SectionHeading.astro';
+import Reveal from '../ui/Reveal.astro';
+import GlassCard from '../ui/GlassCard.astro';
+import { processSteps } from '../../data/process';
+
+const steps = processSteps;
+---
+
+<Section bg="grid">
+  <Reveal>
+    <SectionHeading eyebrow="Cómo trabajamos" title="Un proceso claro, de la primera reunión al soporte" />
+  </Reveal>
+  <ol class="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-5">
+    {
+      steps.map((s, i) => (
+        <li>
+          <Reveal delay={i * 100} class="h-full">
+            <GlassCard as="div" class="flex h-full flex-col gap-3 !p-5">
+              <span class="text-gradient font-mono text-3xl font-bold" aria-hidden="true">{String(i + 1).padStart(2, '0')}</span>
+              <h3 class="text-lg leading-snug"><span class="sr-only">Paso {i + 1}: </span>{s.title}</h3>
+              <p class="text-sm text-text-muted">{s.text}</p>
+            </GlassCard>
+          </Reveal>
+        </li>
+      ))
+    }
+  </ol>
+</Section>

@@ -1,0 +1,64 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PageHero from '../components/templates/PageHero.astro';
+import Section from '../components/ui/Section.astro';
+import SectionHeading from '../components/ui/SectionHeading.astro';
+import Reveal from '../components/ui/Reveal.astro';
+import GlassCard from '../components/ui/GlassCard.astro';
+import Button from '../components/ui/Button.astro';
+import { company, whatsappUrl } from '../data/company';
+import { processSteps } from '../data/process';
+import { seo } from '../data/seo';
+
+const meta = seo['/contacto/'];
+const steps = processSteps.slice(0, 2);
+---
+
+<BaseLayout title={meta.title} description={meta.description}>
+  <PageHero
+    eyebrow="Contacto"
+    title="Agenda tu diagnóstico sin costo"
+    highlight="sin costo"
+    subtitle="Cuéntanos qué proceso quieres mejorar y te enviamos una propuesta clara."
+    breadcrumbs={[{ label: 'Contacto' }]}
+  />
+
+  <Section bg="none">
+    <Reveal><SectionHeading eyebrow="La reunión" title="Qué pasa en la reunión" /></Reveal>
+    <ol class="mt-10 grid gap-5 md:grid-cols-2">
+      {
+        steps.map((s, i) => (
+          <li>
+            <Reveal delay={i * 100} class="h-full">
+              <GlassCard as="div" class="flex h-full flex-col gap-3">
+                <span class="text-gradient font-mono text-3xl font-bold" aria-hidden="true">{String(i + 1).padStart(2, '0')}</span>
+                <h3 class="text-h3"><span class="sr-only">Paso {i + 1}: </span>{s.title}</h3>
+                <p class="text-text-muted">{s.text}</p>
+              </GlassCard>
+            </Reveal>
+          </li>
+        ))
+      }
+    </ol>
+  </Section>
+
+  <Section bg="alt">
+    <div class="grid gap-8 lg:grid-cols-2">
+      <Reveal class="h-full">
+        <div class="glow-border relative isolate flex h-full flex-col items-start gap-5 overflow-hidden rounded-3xl bg-bg-900 p-8 sm:p-10">
+          <h2 class="text-h2">Escríbenos por WhatsApp</h2>
+          <p class="text-text-muted">La forma más rápida de agendar. Responderemos con un horario para la reunión.</p>
+          <Button href={whatsappUrl} variant="primary" size="lg" target="_blank" rel="noopener noreferrer" class="w-full sm:w-auto">
+            Agendar por WhatsApp · {company.whatsapp.display}
+          </Button>
+        </div>
+      </Reveal>
+      <Reveal delay={100} class="h-full">
+        <div class="glass flex h-full flex-col gap-3 rounded-3xl border-dashed p-8 sm:p-10" data-placeholder="formulario">
+          <h2 class="text-h2">Formulario: próximamente</h2>
+          <p class="text-text-muted">Muy pronto podrás escribirnos también desde aquí. Mientras tanto, usa WhatsApp.</p>
+        </div>
+      </Reveal>
+    </div>
+  </Section>
+</BaseLayout>

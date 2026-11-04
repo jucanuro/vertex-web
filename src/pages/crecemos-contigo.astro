@@ -1,0 +1,54 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PageHero from '../components/templates/PageHero.astro';
+import CTABlock from '../components/templates/CTABlock.astro';
+import GrowWithYou from '../components/home/GrowWithYou.astro';
+import ClientLogo from '../components/clients/ClientLogo.astro';
+import Section from '../components/ui/Section.astro';
+import SectionHeading from '../components/ui/SectionHeading.astro';
+import Reveal from '../components/ui/Reveal.astro';
+import { company } from '../data/company';
+import { pillars } from '../data/pillars';
+import { clients } from '../data/clients';
+import { seo } from '../data/seo';
+
+const meta = seo['/crecemos-contigo/'];
+const pillar = pillars.find((p) => p.id === 'crecemos-contigo')!;
+---
+
+<BaseLayout title={meta.title} description={meta.description}>
+  <PageHero
+    eyebrow="Crecemos contigo"
+    title="Crecemos contigo, etapa por etapa"
+    highlight="etapa por etapa"
+    subtitle={pillar.description}
+    breadcrumbs={[{ label: 'Crecemos contigo' }]}
+  />
+
+  <Section bg="none">
+    <Reveal>
+      <SectionHeading eyebrow="Nuestra filosofía" title="Un socio a largo plazo" />
+      <p class="mt-6 max-w-3xl text-lg text-text-muted">{company.philosophy}</p>
+    </Reveal>
+  </Section>
+
+  <GrowWithYou showLink={false} />
+
+  <Section bg="alt">
+    <Reveal>
+      <SectionHeading eyebrow="Cómo proponemos mejoras" title="Empezamos por lo más urgente" />
+      <p class="mt-6 max-w-3xl text-lg text-text-muted">
+        No solo entregamos un servicio: proponemos mejoras y crecemos contigo por etapas. Primero resolvemos tu necesidad más urgente y, a partir de ahí, te sugerimos el siguiente paso.
+      </p>
+    </Reveal>
+  </Section>
+
+  <Section bg="none">
+    <Reveal><SectionHeading eyebrow="Clientes" title="Clientes que siguen creciendo con nosotros" /></Reveal>
+    <ul class="mt-10 grid grid-cols-2 justify-items-center gap-4 sm:grid-cols-3 lg:grid-cols-4">
+      {clients.map((c) => <li class="w-full"><ClientLogo client={c} class="mx-auto" /></li>)}
+    </ul>
+  </Section>
+
+  <CTABlock audience="empresas" />
+</BaseLayout>
