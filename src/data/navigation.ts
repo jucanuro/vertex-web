@@ -9,6 +9,8 @@ export interface NavLink {
   href: string;
   /** Camino de entrada: define el gradiente del subrayado */
   path?: PathKey;
+  /** Frase corta (tarjetas del menú móvil) */
+  blurb?: string;
   /** Muestra un badge "Próximamente" y no se enlaza */
   soon?: boolean;
 }
@@ -26,6 +28,8 @@ export type MainItem =
 
 export interface Navigation {
   main: MainItem[];
+  /** Enlaces del menú móvil que van después de Servicios */
+  mobileLinks: NavLink[];
   cta: NavLink;
   footer: {
     services: NavLink[];
@@ -47,12 +51,18 @@ export const megaColumns: MegaColumn[] = verbOrder.map((verb) => ({
 
 const es: Navigation = {
   main: [
-    { kind: 'link', label: 'Para negocios', href: '/negocios/', path: 'negocios' },
-    { kind: 'link', label: 'Para empresas', href: '/empresas/', path: 'empresas' },
+    { kind: 'link', label: 'Para negocios', href: '/negocios/', path: 'negocios', blurb: 'Sistemas listos para usar desde tu celular.' },
+    { kind: 'link', label: 'Para empresas', href: '/empresas/', path: 'empresas', blurb: 'Software a medida, datos e IA aplicada.' },
     { kind: 'mega', label: 'Servicios', href: '/servicios/', columns: megaColumns },
     { kind: 'link', label: 'Casos', href: '/casos/' },
     { kind: 'link', label: 'Nosotros', href: '/nosotros/' },
     // TODO: añadir 'Blog' (/blog/) cuando exista la página
+  ],
+  mobileLinks: [
+    { label: 'Casos', href: '/casos/' },
+    { label: 'Crecemos contigo', href: '/crecemos-contigo/' },
+    { label: 'Nosotros', href: '/nosotros/' },
+    // TODO: añadir { label: 'Blog', href: '/blog/' } cuando exista la página
   ],
   cta: { label: 'Agenda tu diagnóstico', href: '/contacto/' },
   footer: {

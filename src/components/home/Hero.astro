@@ -182,6 +182,16 @@ const paths = [
   .hero-canvas.is-on {
     opacity: 1;
   }
+  /* Con el canvas activo la V estática se desvanece (solo opacity: sin saltos de layout).
+     En escritorio se mantiene tal como estaba. */
+  .vmark {
+    transition: opacity 1.4s ease;
+  }
+  @media (max-width: 1023px) {
+    .hero:has(.hero-canvas.is-on) .vmark {
+      opacity: 0;
+    }
+  }
 
   .hero-veil {
     pointer-events: none;
@@ -379,10 +389,36 @@ const paths = [
   let stop: (() => void) | undefined;
   let gen = 0;
 
+  /*
+   * Degradación inteligente: si NO es apto, no se descarga el chunk y quedan el
+   * fondo CSS y la V estática. Cómo simular cada caso en DevTools:
+   *  - reduced-motion: Rendering > "Emulate CSS media feature prefers-reduced-motion".
+   *  - saveData: Network conditions no lo ofrece; en consola, antes de recargar,
+   *    Object.defineProperty(navigator.connection, 'saveData', { value: true }),
+   *    o activa "Ahorro de datos" (Android) / extensión Chrome Data Saver.
+   *  - 2g / slow-2g: Network > throttling "Slow 4G"/"3G" no cambia effectiveType a 2g;
+   *    usa Object.defineProperty(navigator.connection, 'effectiveType', { value: '2g' }).
+   *  - deviceMemory <= 2: Object.defineProperty(navigator, 'deviceMemory', { value: 2 }).
+   *  - hardwareConcurrency <= 2: Sensors/Devtools "CPU cores" en Chrome
+   *    (Rendering > "Hardware concurrency") o defineProperty(navigator, 'hardwareConcurrency', { value: 2 }).
+   * Para que los defineProperty apliquen antes de `load`, ejecútalos en un Snippet con
+   * "Pausar en el primer script" o recarga con la pestaña Sources > Overrides.
+   * Comprobación: Network > JS no debe listar particles.*.js.
+   */
+  type Nav = Navigator & {
+    connection?: { saveData?: boolean; effectiveType?: string };
+    deviceMemory?: number;
+  };
   function eligible(): boolean {
-    const conn = (navigator as Navigator & { connection?: { saveData?: boolean } }).connection;
-    return (
-      innerWidth >= 768 && !matchMedia('(prefers-reduced-motion: reduce)').matches && !conn?.saveData
+    const nav = navigator as Nav;
+    const c = nav.connection;
+    return !(
+      matchMedia('(prefers-reduced-motion: reduce)').matches ||
+      c?.saveData ||
+      c?.effectiveType === '2g' ||
+      c?.effectiveType === 'slow-2g' ||
+      (nav.deviceMemory && nav.deviceMemory <= 2) ||
+      (nav.hardwareConcurrency && nav.hardwareConcurrency <= 2)
     );
   }
 
