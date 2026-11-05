@@ -1,0 +1,41 @@
+---
+import { products } from '../../data/products';
+
+interface Props {
+  product: 'qhalisys' | 'canchaya';
+  variant?: 'full' | 'icon';
+  /** Alto en px (número) o en cualquier unidad CSS (string, p. ej. '2rem'). Alternativa: pasar una clase. */
+  height?: number | string;
+  class?: string;
+  alt?: string;
+  /** Logo en la primera pantalla visible: carga inmediata */
+  eager?: boolean;
+}
+const { product, variant = 'full', height, class: className, alt, eager = false } = Astro.props;
+const p = products[product];
+const name = alt ?? p.name;
+const h = typeof height === 'number' ? `${height}px` : height;
+const style = h ? `height:${h};width:auto` : undefined;
+const load = eager ? { loading: 'eager' as const, fetchpriority: 'high' as const } : { loading: 'lazy' as const };
+---
+
+{
+  variant === 'icon' ? (
+    <img src={p.icon.src} alt={name} width={p.icon.width} height={p.icon.height} decoding="async" {...load} class:list={['product-logo', className]} style={style} />
+  ) : (
+    <>
+      {/* Dos <img> (no SVG inline: los ids de gradientes chocarían). CSS muestra solo la del tema activo.
+          Ambas llevan alt: la oculta (display:none) no entra al árbol de accesibilidad, así que nunca se lee dos veces
+          y el alt correcto queda en la visible sea cual sea el tema. */}
+      <img src={p.logo.light} alt={name} width={p.logo.width} height={p.logo.height} decoding="async" {...load} class:list={['product-logo logo-on-light', className]} style={style} />
+      <img src={p.logo.dark} alt={name} width={p.logo.width} height={p.logo.height} decoding="async" {...load} class:list={['product-logo logo-on-dark', className]} style={style} />
+    </>
+  )
+}
+
+<style>
+  .product-logo {
+    max-width: 100%;
+    object-fit: contain;
+  }
+</style>

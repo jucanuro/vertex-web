@@ -15,6 +15,7 @@ import ServiceCard from '../components/services/ServiceCard.astro';
 import Process from '../components/home/Process.astro';
 import { servicesById, type ServiceId } from '../data/services';
 import { servicePages, contractingForms, guarantee } from '../data/service-pages';
+import ProductLogo from '../components/brand/ProductLogo.astro';
 import { products } from '../data/products';
 import { cases } from '../data/cases';
 import { pillars } from '../data/pillars';
@@ -139,6 +140,7 @@ const chainWa = whatsappLink('Hola, quiero que me avisen cuando Vertex Chain est
                   <Reveal delay={i * 100} class="h-full">
                     <GlassCard as="div" accent={service.accent} class="flex h-full flex-col gap-3">
                       <div class="flex flex-wrap items-center gap-3">
+                        <ProductLogo product={pid} variant="icon" height={40} alt="" />
                         <h3 class="text-h3">{p.name}</h3>
                         {pid === 'qhalisys' && <Badge>En operación</Badge>}
                       </div>

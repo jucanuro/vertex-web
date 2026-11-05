@@ -33,6 +33,7 @@ const parts = highlight && idx >= 0 ? [title.slice(0, idx), highlight, title.sli
   }
   <div class="mx-auto flex w-full max-w-[1200px] flex-col gap-6 px-5 sm:px-8">
     <Breadcrumbs items={breadcrumbs} />
+    <slot name="logo" />
     {eyebrow && <Eyebrow color={accent}>{eyebrow}</Eyebrow>}
     <h1 class="text-h1 max-w-4xl text-balance">
       {

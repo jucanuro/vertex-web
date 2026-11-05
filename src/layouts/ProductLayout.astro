@@ -8,6 +8,7 @@ import Reveal from '../components/ui/Reveal.astro';
 import GlassCard from '../components/ui/GlassCard.astro';
 import Badge from '../components/ui/Badge.astro';
 import Button from '../components/ui/Button.astro';
+import ProductLogo from '../components/brand/ProductLogo.astro';
 import Icon from '../components/ui/Icon.astro';
 import ImagePlaceholder from '../components/ui/ImagePlaceholder.astro';
 import { products, type Product } from '../data/products';
@@ -29,6 +30,7 @@ const jsonLd = {
   name: p.name,
   description: p.description,
   url: new URL(p.slug, Astro.site).href,
+  logo: new URL(p.logo.light, Astro.site).href,
   provider: { '@type': 'Organization', name: company.name, url: Astro.site!.origin },
 };
 ---
@@ -39,8 +41,9 @@ const jsonLd = {
     title={`${p.name}: ${id === 'qhalisys' ? 'el sistema para tu farmacia' : 'reserva tu cancha en línea'}`}
     highlight={p.name}
     subtitle={p.description}
-    breadcrumbs={[{ label: 'Servicios', href: '/servicios/' }, { label: 'Vertex Platforms', href: '/servicios/sistemas-saas/' }, { label: p.name }]}
+    breadcrumbs={[{ label: 'Servicios', href: '/servicios/' }, { label: 'Vertex Platforms', href: '/servicios/sistemas-saas/' }, { label: p.name, icon: p.icon }]}
   >
+    <ProductLogo slot="logo" product={id} variant="full" height={64} eager />
     {operating && <Badge>En operación</Badge>}
     <Button href={wa} variant="primary" size="lg" target="_blank" rel="noopener noreferrer">Escríbenos por WhatsApp</Button>
   </PageHero>

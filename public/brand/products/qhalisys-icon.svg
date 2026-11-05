@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="10 10 190 190" role="img" aria-label="Qhalisys">
+<defs>
+<linearGradient id="qiring" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#0E7490"/><stop offset="1" stop-color="#10B981"/></linearGradient>
+<linearGradient id="qicross" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#10B981"/><stop offset="1" stop-color="#0E7490"/></linearGradient>
+<mask id="qimask" maskUnits="userSpaceOnUse" x="0" y="0" width="200" height="200">
+<rect width="200" height="200" fill="#fff"/>
+<rect x="116.8" y="139.8" width="88" height="42" rx="21" transform="rotate(45 160.8 160.8)" fill="#000"/>
+</mask>
+<clipPath id="qicap"><rect x="124.8" y="147.8" width="72" height="26" rx="13" transform="rotate(45 160.8 160.8)"/></clipPath>
+</defs>
+<circle cx="100" cy="100" r="70" fill="none" stroke="url(#qiring)" stroke-width="22" mask="url(#qimask)"/>
+<g clip-path="url(#qicap)">
+<rect x="124.8" y="147.8" width="36" height="26" fill="#0B5C7A" transform="rotate(45 160.8 160.8)"/>
+<rect x="160.8" y="147.8" width="36" height="26" fill="#10B981" transform="rotate(45 160.8 160.8)"/>
+</g>
+<rect x="77" y="92.5" width="46" height="15" rx="6" fill="url(#qicross)"/>
+<rect x="92.5" y="77" width="15" height="46" rx="6" fill="url(#qicross)"/>
+</svg>

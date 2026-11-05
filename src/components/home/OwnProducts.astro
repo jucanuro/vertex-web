@@ -4,11 +4,12 @@ import SectionHeading from '../ui/SectionHeading.astro';
 import Reveal from '../ui/Reveal.astro';
 import Badge from '../ui/Badge.astro';
 import ImagePlaceholder from '../ui/ImagePlaceholder.astro';
+import ProductLogo from '../brand/ProductLogo.astro';
 import { products } from '../../data/products';
 
 const items = [
-  { p: products.qhalisys, badge: 'En operación' },
-  { p: products.canchaya, badge: undefined },
+  { id: 'qhalisys' as const, p: products.qhalisys, badge: 'En operación' },
+  { id: 'canchaya' as const, p: products.canchaya, badge: undefined },
 ];
 ---
 
@@ -18,10 +19,11 @@ const items = [
   </Reveal>
   <div class="mt-12 flex flex-col gap-16 lg:gap-24">
     {
-      items.map(({ p, badge }, i) => (
+      items.map(({ id, p, badge }, i) => (
         <div class="grid items-center gap-8 lg:grid-cols-2 lg:gap-14">
           <Reveal class:list={[i % 2 === 1 && 'lg:order-2']}>
             <div class="flex flex-col items-start gap-4">
+              <ProductLogo product={id} variant="full" height={52} />
               <div class="flex flex-wrap items-center gap-3">
                 <h3 class="text-h2">{p.name}</h3>
                 {badge && <Badge>{badge}</Badge>}

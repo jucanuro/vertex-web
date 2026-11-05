@@ -6,15 +6,9 @@ import GlassCard from '../components/ui/GlassCard.astro';
 import Reveal from '../components/ui/Reveal.astro';
 import ThemePanel from '../components/ui/ThemePanel.astro';
 import Hero from '../components/home/Hero.astro';
+import ProductLogo from '../components/brand/ProductLogo.astro';
 import { clients } from '../data/clients';
 
-// SVG de ejemplo temporal: solo para probar el caso "con logo" en esta página
-const demoLogo =
-  'data:image/svg+xml,' +
-  encodeURIComponent(
-    '<svg xmlns="http://www.w3.org/2000/svg" width="140" height="56" viewBox="0 0 140 56"><rect width="140" height="56" rx="10" fill="#4F8DF7"/><circle cx="28" cy="28" r="12" fill="#22D3EE"/><rect x="48" y="20" width="76" height="16" rx="4" fill="#E879F9"/></svg>',
-  );
-const clientsDemo = clients.map((c, i) => (i < 4 ? { ...c, logo: demoLogo } : c));
 ---
 
 <BaseLayout title="Sistema de diseño" description="Fundaciones visuales del sitio de Vertex Quant Labs." noindex>
@@ -25,8 +19,8 @@ const clientsDemo = clients.map((c, i) => (i < 4 ? { ...c, logo: demoLogo } : c)
   <Section id="temas">
     <SectionHeading eyebrow="Temas" title="Oscuro y claro, lado a lado" subtitle="Cada columna fuerza su tema con data-theme; el botón del header cambia el tema del resto de la página." class="mb-10" />
     <div class="grid items-start gap-6 xl:grid-cols-2">
-      <ThemePanel theme="dark" clients={clientsDemo} />
-      <ThemePanel theme="light" clients={clientsDemo} />
+      <ThemePanel theme="dark" clients={clients} />
+      <ThemePanel theme="light" clients={clients} />
     </div>
   </Section>
 
@@ -34,6 +28,25 @@ const clientsDemo = clients.map((c, i) => (i < 4 ? { ...c, logo: demoLogo } : c)
     <SectionHeading eyebrow="Home" title="Hero" subtitle="Versión contenida (sin alto de pantalla completa) con las tres capas de fondo y los dos caminos de entrada. Sigue el tema activo." class="mb-10" />
     <div class="overflow-hidden rounded-xl border border-(--border)">
       <Hero as="h2" contained />
+    </div>
+  </Section>
+
+  <Section id="marcas-producto">
+    <SectionHeading eyebrow="Marcas" title="Marcas de producto" subtitle="Logo completo e ícono de Qhalisys y Canchaya sobre fondo claro y oscuro." class="mb-10" />
+    <div class="grid gap-6 md:grid-cols-2">
+      {
+        (['light', 'dark'] as const).map((t) => (
+          <div data-theme={t} class="flex flex-col gap-6 rounded-2xl border border-border p-6" style="background:var(--c-bg);color:var(--c-text-muted)">
+            <p class="font-mono text-xs">Fondo {t === 'light' ? 'claro' : 'oscuro'}</p>
+            {(['qhalisys', 'canchaya'] as const).map((id) => (
+              <div class="flex flex-wrap items-center gap-6">
+                <ProductLogo product={id} variant="full" height={48} />
+                <ProductLogo product={id} variant="icon" height={48} />
+              </div>
+            ))}
+          </div>
+        ))
+      }
     </div>
   </Section>
 

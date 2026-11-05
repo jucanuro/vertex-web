@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="28 10 144 192" role="img" aria-label="Canchaya">
+<defs><linearGradient id="cipin" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#22D88A"/><stop offset="1" stop-color="#0A8F5C"/></linearGradient></defs>
+<path d="M100 192 C70 160 38 128 38 82 A62 62 0 0 1 162 82 C162 128 130 160 100 192 Z" fill="url(#cipin)"/>
+<circle cx="100" cy="82" r="42" fill="#fff"/>
+<g fill="none" stroke="#0A6B47" stroke-width="3.5" stroke-linejoin="round" stroke-linecap="round">
+<rect x="70" y="62" width="60" height="40" rx="3"/>
+<line x1="100" y1="62" x2="100" y2="102"/>
+<circle cx="100" cy="82" r="9"/>
+<rect x="70" y="72" width="11" height="20"/>
+<rect x="119" y="72" width="11" height="20"/>
+</g>
+<circle cx="100" cy="82" r="3.8" fill="#FF8A00"/>
+</svg>

@@ -215,6 +215,17 @@
   --logo-node-stroke: #e8f1ff;
   --logo-node-fill: #0b1424;
   --logo-filter: grayscale(1) brightness(0) invert(1);
+  /* Logos con versión clara/oscura (ProductLogo, ClientLogo): lo decide el data-theme más cercano */
+  --show-logo-light: none;
+  --show-logo-dark: inline-block;
+}
+
+/* Logos de producto/cliente claro-oscuro. Sin data-theme rige el valor oscuro de :root. */
+.logo-on-light {
+  display: var(--show-logo-light);
+}
+.logo-on-dark {
+  display: var(--show-logo-dark);
 }
 
 /* Tema claro */
@@ -303,6 +314,8 @@
   --logo-node-stroke: #0a2f63;
   --logo-node-fill: #fff;
   --logo-filter: grayscale(1);
+  --show-logo-light: inline-block;
+  --show-logo-dark: none;
 }
 
 :root {

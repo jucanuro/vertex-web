@@ -6,6 +6,7 @@ import Section from '../components/ui/Section.astro';
 import SectionHeading from '../components/ui/SectionHeading.astro';
 import Reveal from '../components/ui/Reveal.astro';
 import GlassCard from '../components/ui/GlassCard.astro';
+import ProductLogo from '../components/brand/ProductLogo.astro';
 import { servicesById } from '../data/services';
 import { products } from '../data/products';
 import { seo } from '../data/seo';
@@ -49,6 +50,13 @@ const blocks = [
 
   <Section bg="none">
     <dl class="glass grid gap-6 rounded-2xl p-6 sm:grid-cols-3">
+      {
+        c.id === 'qhalisys' && (
+          <div class="sm:col-span-3">
+            <ProductLogo product="qhalisys" variant="full" height={48} />
+          </div>
+        )
+      }
       <div>
         <dt class="font-mono text-xs tracking-widest text-primary uppercase">Sector</dt>
         <dd class="mt-1">{c.sector}</dd>
