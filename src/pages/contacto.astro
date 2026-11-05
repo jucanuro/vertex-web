@@ -25,7 +25,7 @@ const steps = processSteps.slice(0, 2);
 
   <Section bg="none">
     <Reveal><SectionHeading eyebrow="La reunión" title="Qué pasa en la reunión" /></Reveal>
-    <ol class="mt-10 grid gap-5 md:grid-cols-2">
+    <ol class="mt-(--heading-gap) grid gap-(--card-gap) md:grid-cols-2">
       {
         steps.map((s, i) => (
           <li>

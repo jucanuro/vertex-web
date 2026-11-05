@@ -5,12 +5,15 @@ import Button from './Button.astro';
 import Badge from './Badge.astro';
 import VerbChip from './VerbChip.astro';
 import ImagePlaceholder from './ImagePlaceholder.astro';
+import DeviceFrame from './DeviceFrame.astro';
+import { resolveScreenshots } from '../../lib/screenshots';
 import Section from './Section.astro';
 import Logo from '../brand/Logo.astro';
 import ServiceCard from '../services/ServiceCard.astro';
 import ClientLogo from '../clients/ClientLogo.astro';
 import MegaMenuContent from '../layout/MegaMenuContent.astro';
 import { services, verbs } from '../../data/services';
+import { products } from '../../data/products';
 import type { Client } from '../../data/clients';
 
 interface Props {
@@ -19,6 +22,7 @@ interface Props {
 }
 const { theme, clients } = Astro.props;
 const dark = theme === 'dark';
+const demoDesktop = resolveScreenshots(products.qhalisys.screenshots).find((s) => s.kind === 'desktop');
 
 // [token CSS, nombre, hex oscuro, hex claro]: los hex son solo documentación; los swatches usan las variables
 const palette = [
@@ -174,6 +178,18 @@ const sample = services.slice(0, 3);
       <Logo variant="icon" class="text-3xl" />
     </div>
     <ImagePlaceholder ratio="16 / 9" label="Captura de Qhalisys" class="mt-6" />
+  </div>
+
+  <div class="frame-block">
+    <h3 class="text-h3 mb-4">Capturas y marcos</h3>
+    <div class="flex flex-col items-start gap-8">
+      {demoDesktop && <DeviceFrame variant="browser" image={demoDesktop.image} alt={demoDesktop.alt} label="qhalisys" sizes="(min-width: 1280px) 520px, calc(100vw - 80px)" class="w-full" />}
+      <div class="w-44">
+        <DeviceFrame variant="phone">
+          <ImagePlaceholder ratio="9 / 19.5" label="Espacio para captura" class="!rounded-none !border-0" />
+        </DeviceFrame>
+      </div>
+    </div>
   </div>
 </div>
 

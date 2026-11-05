@@ -17,7 +17,7 @@ import { clients } from '../data/clients';
   </Section>
 
   <Section id="temas">
-    <SectionHeading eyebrow="Temas" title="Oscuro y claro, lado a lado" subtitle="Cada columna fuerza su tema con data-theme; el botón del header cambia el tema del resto de la página." class="mb-10" />
+    <SectionHeading eyebrow="Temas" title="Oscuro y claro, lado a lado" subtitle="Cada columna fuerza su tema con data-theme; el botón del header cambia el tema del resto de la página." class="mb-(--heading-gap)" />
     <div class="grid items-start gap-6 xl:grid-cols-2">
       <ThemePanel theme="dark" clients={clients} />
       <ThemePanel theme="light" clients={clients} />
@@ -25,15 +25,15 @@ import { clients } from '../data/clients';
   </Section>
 
   <Section id="hero" bg="alt">
-    <SectionHeading eyebrow="Home" title="Hero" subtitle="Versión contenida (sin alto de pantalla completa) con las tres capas de fondo y los dos caminos de entrada. Sigue el tema activo." class="mb-10" />
+    <SectionHeading eyebrow="Home" title="Hero" subtitle="Versión contenida (sin alto de pantalla completa) con las tres capas de fondo y los dos caminos de entrada. Sigue el tema activo." class="mb-(--heading-gap)" />
     <div class="overflow-hidden rounded-xl border border-(--border)">
       <Hero as="h2" contained />
     </div>
   </Section>
 
   <Section id="marcas-producto">
-    <SectionHeading eyebrow="Marcas" title="Marcas de producto" subtitle="Logo completo e ícono de Qhalisys y Canchaya sobre fondo claro y oscuro." class="mb-10" />
-    <div class="grid gap-6 md:grid-cols-2">
+    <SectionHeading eyebrow="Marcas" title="Marcas de producto" subtitle="Logo completo e ícono de Qhalisys y Canchaya sobre fondo claro y oscuro." class="mb-(--heading-gap)" />
+    <div class="grid gap-(--card-gap) md:grid-cols-2">
       {
         (['light', 'dark'] as const).map((t) => (
           <div data-theme={t} class="flex flex-col gap-6 rounded-2xl border border-border p-6" style="background:var(--c-bg);color:var(--c-text-muted)">
@@ -51,7 +51,7 @@ import { clients } from '../data/clients';
   </Section>
 
   <Section bg="aurora" id="reveal">
-    <SectionHeading eyebrow="Movimiento" title="Reveal escalonado" subtitle="Desplázate para ver la aparición con retraso incremental." class="mb-10" />
+    <SectionHeading eyebrow="Movimiento" title="Reveal escalonado" subtitle="Desplázate para ver la aparición con retraso incremental." class="mb-(--heading-gap)" />
     <div class="grid gap-5 sm:grid-cols-3">
       {
         [0, 1, 2].map((i) => (

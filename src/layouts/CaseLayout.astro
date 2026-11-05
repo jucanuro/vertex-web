@@ -7,6 +7,7 @@ import SectionHeading from '../components/ui/SectionHeading.astro';
 import Reveal from '../components/ui/Reveal.astro';
 import GlassCard from '../components/ui/GlassCard.astro';
 import ProductLogo from '../components/brand/ProductLogo.astro';
+import ScreenshotShowcase from '../components/ui/ScreenshotShowcase.astro';
 import { servicesById } from '../data/services';
 import { products } from '../data/products';
 import { seo } from '../data/seo';
@@ -21,6 +22,8 @@ const path = `/casos/${c.id}/`;
 const meta = seo[path as keyof typeof seo];
 const name = c.shortName ?? c.name;
 const ownProduct = c.kind === 'producto propio' ? products[c.id as keyof typeof products] : undefined;
+const shotList = c.screenshots ?? ownProduct?.screenshots;
+const limsIndex = c.stages?.findIndex((s) => s.includes('LIMS')) ?? -1;
 const last = (c.stages?.length ?? 0) - 1;
 
 const jsonLd = {
@@ -76,10 +79,11 @@ const blocks = [
         </dd>
       </div>
     </dl>
+    {shotList && shotList.length > 0 && <div class="mt-(--heading-gap)"><ScreenshotShowcase screenshots={shotList} name={name} size="default" /></div>}
   </Section>
 
   <Section bg="alt">
-    <div class="grid gap-6 lg:grid-cols-3">
+    <div class="grid gap-(--card-gap) lg:grid-cols-3">
       {
         blocks.map((b, i) => (
           <Reveal delay={i * 100} class="h-full">
@@ -98,7 +102,7 @@ const blocks = [
     c.stages && c.stages.length > 0 && (
       <Section bg="none">
         <Reveal><SectionHeading eyebrow="Etapas" title="Cómo fue creciendo" /></Reveal>
-        <ol class="mt-10 grid gap-4 md:grid-cols-4">
+        <ol class="mt-(--heading-gap) grid gap-(--card-gap) md:grid-cols-4">
           {
             c.stages.map((s, i) => (
               <li>
@@ -106,6 +110,7 @@ const blocks = [
                   <GlassCard as="div" class="flex h-full flex-col gap-2 !p-5">
                     <span class="text-gradient font-mono text-3xl font-bold" aria-hidden="true">{String(i + 1).padStart(2, '0')}</span>
                     <h3 class="text-lg leading-snug">{i === last ? 'Siguiente etapa' : s}</h3>
+                    {i === limsIndex && c.screenshots && <ScreenshotShowcase screenshots={c.screenshots} name={name} size="stage" decorative class="mt-2" />}
                   </GlassCard>
                 </Reveal>
               </li>

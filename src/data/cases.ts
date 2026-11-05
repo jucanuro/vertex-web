@@ -1,4 +1,4 @@
-import { products } from './products';
+import { products, type Screenshot } from './products';
 import type { ServiceId } from './services';
 
 export interface CaseStudy {
@@ -13,6 +13,8 @@ export interface CaseStudy {
   result: string;
   stages?: string[];
   services: ServiceId[];
+  /** Capturas reales (src/assets/cases/) */
+  screenshots?: Screenshot[];
 }
 
 export const cases: CaseStudy[] = [
@@ -28,6 +30,13 @@ export const cases: CaseStudy[] = [
     result: 'Operación y canal comercial en una sola plataforma.',
     stages: ['Web comercial', 'Mejoras propuestas', 'Sistema de operaciones (LIMS)', 'Siguiente etapa'],
     services: ['build'],
+    screenshots: [
+      {
+        file: 'cases/vicaf-1.png',
+        kind: 'desktop',
+        alt: 'Panel del sistema de operación del laboratorio de Grupo VICAF',
+      },
+    ],
   },
   {
     id: 'instituto-san-pablo',

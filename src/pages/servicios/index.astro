@@ -35,7 +35,7 @@ const title = (v: Verb) => (v === 'base' ? 'La base: Vertex Build' : verbs[v].la
         <Reveal>
           <SectionHeading eyebrow={verbs[v].label} title={title(v)} subtitle={intro[v]} />
         </Reveal>
-        <ul class="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+        <ul class="mt-(--heading-gap) grid gap-(--card-gap) sm:grid-cols-2 lg:grid-cols-3">
           {groups[v].map((s, i) => <li><Reveal delay={i * 100} class="h-full"><ServiceCard service={s} as="div" /></Reveal></li>)}
         </ul>
       </Section>

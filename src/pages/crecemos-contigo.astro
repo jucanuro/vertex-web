@@ -45,7 +45,7 @@ const pillar = pillars.find((p) => p.id === 'crecemos-contigo')!;
 
   <Section bg="none">
     <Reveal><SectionHeading eyebrow="Clientes" title="Clientes que siguen creciendo con nosotros" /></Reveal>
-    <ul class="mt-10 grid grid-cols-2 justify-items-center gap-x-4 gap-y-8 sm:grid-cols-3 lg:grid-cols-4">
+    <ul class="mt-(--heading-gap) grid grid-cols-2 justify-items-center gap-x-4 gap-y-8 sm:grid-cols-3 lg:grid-cols-4">
       {clients.map((c) => <li class="w-full"><ClientLogo client={c} variant="grid" /></li>)}
     </ul>
   </Section>

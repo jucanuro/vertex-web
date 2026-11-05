@@ -5,6 +5,8 @@ import Breadcrumbs, { type Crumb } from './Breadcrumbs.astro';
 interface Props {
   eyebrow?: string;
   title: string;
+  /** Texto solo para lectores de pantalla y buscadores, antes del título visible (p. ej. "Qhalisys: ") */
+  srTitlePrefix?: string;
   /** Fragmento del título con degradado */
   highlight?: string;
   subtitle?: string;
@@ -14,12 +16,12 @@ interface Props {
   /** Color del punto del eyebrow */
   accent?: string;
 }
-const { eyebrow, title, highlight, subtitle, breadcrumbs, gradient = 'brand', bg = 'aurora', accent } = Astro.props;
+const { eyebrow, title, srTitlePrefix, highlight, subtitle, breadcrumbs, gradient = 'brand', bg = 'aurora', accent } = Astro.props;
 const idx = highlight ? title.indexOf(highlight) : -1;
 const parts = highlight && idx >= 0 ? [title.slice(0, idx), highlight, title.slice(idx + highlight.length)] : null;
 ---
 
-<header class="relative isolate overflow-hidden" style="padding-block:calc(var(--header-h) + 2rem) clamp(3rem,2rem + 4vw,5.5rem)">
+<header class="relative isolate overflow-hidden" style="padding-block:calc(var(--header-h) + 2rem) var(--section-y)">
   {
     bg === 'aurora' ? (
       <div class="bg-aurora absolute inset-0 -z-10" aria-hidden="true" />
@@ -36,6 +38,7 @@ const parts = highlight && idx >= 0 ? [title.slice(0, idx), highlight, title.sli
     <slot name="logo" />
     {eyebrow && <Eyebrow color={accent}>{eyebrow}</Eyebrow>}
     <h1 class="text-h1 max-w-4xl text-balance">
+      {srTitlePrefix && <span class="sr-only">{srTitlePrefix}</span>}
       {
         parts ? (
           <>{parts[0]}<span class="text-gradient" style={`background-image:var(--gradient-${gradient})`}>{parts[1]}</span>{parts[2]}</>
@@ -48,5 +51,6 @@ const parts = highlight && idx >= 0 ? [title.slice(0, idx), highlight, title.sli
     <div class="mt-2 flex flex-col items-stretch gap-3 sm:flex-row sm:items-center empty:hidden">
       <slot />
     </div>
+    <slot name="visual" />
   </div>
 </header>

@@ -94,7 +94,7 @@ const chainWa = whatsappLink('Hola, quiero que me avisen cuando Vertex Chain est
     page.includes && (
       <Section bg="alt">
         <Reveal><SectionHeading eyebrow={service.brand} title={page.includes.title} /></Reveal>
-        <ul class="mt-10 grid gap-4 sm:grid-cols-2">
+        <ul class="mt-(--heading-gap) grid gap-(--card-gap) sm:grid-cols-2">
           {
             page.includes.items.map((item, i) => (
               <li>
@@ -131,7 +131,7 @@ const chainWa = whatsappLink('Hola, quiero que me avisen cuando Vertex Chain est
     page.productIds && (
       <Section bg="none">
         <Reveal><SectionHeading eyebrow="Plataformas" title="Plataformas que creamos y operamos" /></Reveal>
-        <ul class="mt-10 grid gap-6 md:grid-cols-2">
+        <ul class="mt-(--heading-gap) grid gap-(--card-gap) md:grid-cols-2">
           {
             page.productIds.map((pid, i) => {
               const p = products[pid];
@@ -179,7 +179,7 @@ const chainWa = whatsappLink('Hola, quiero que me avisen cuando Vertex Chain est
     page.contracting && (
       <Section bg="alt">
         <Reveal><SectionHeading eyebrow="Formas de contratar" title="Elige cómo trabajar con nosotros" /></Reveal>
-        <ul class="mt-10 grid gap-5 md:grid-cols-3">
+        <ul class="mt-(--heading-gap) grid gap-(--card-gap) md:grid-cols-3">
           {
             contractingForms.map((f, i) => (
               <li>
@@ -193,7 +193,7 @@ const chainWa = whatsappLink('Hola, quiero que me avisen cuando Vertex Chain est
             ))
           }
         </ul>
-        <Reveal class="mt-10">
+        <Reveal class="mt-(--heading-gap)">
           <div class="glass flex items-start gap-4 rounded-2xl p-6" style={`border-color:color-mix(in srgb, ${service.accentBright} 45%, transparent)`}>
             <span class="mt-1 flex-none" style={`color:${service.accent}`}>
               <Icon svg={'<path d="M12 3l8 3v6c0 4.5-3.2 7.8-8 9-4.8-1.2-8-4.5-8-9V6z"/><path d="m8.5 12 2.5 2.5 4.5-5"/>'} />
@@ -212,7 +212,7 @@ const chainWa = whatsappLink('Hola, quiero que me avisen cuando Vertex Chain est
     serviceCases.length > 0 && (
       <Section bg="none">
         <Reveal><SectionHeading eyebrow="Casos" title={serviceCases.length > 1 ? 'Casos de este servicio' : 'Un caso de este servicio'} /></Reveal>
-        <ul class="mt-10 grid gap-6 md:grid-cols-2">
+        <ul class="mt-(--heading-gap) grid gap-(--card-gap) md:grid-cols-2">
           {serviceCases.map((c, i) => <li><Reveal delay={i * 100} class="h-full"><CaseCard item={c} as="div" /></Reveal></li>)}
         </ul>
       </Section>
@@ -221,7 +221,7 @@ const chainWa = whatsappLink('Hola, quiero que me avisen cuando Vertex Chain est
 
   <Section bg="alt">
     <Reveal><SectionHeading eyebrow="Sigue explorando" title="También te puede interesar" /></Reveal>
-    <ul class="mt-10 grid gap-6 md:grid-cols-2">
+    <ul class="mt-(--heading-gap) grid gap-(--card-gap) md:grid-cols-2">
       {related.map((s, i) => <li><Reveal delay={i * 100} class="h-full"><ServiceCard service={s} as="div" /></Reveal></li>)}
     </ul>
   </Section>

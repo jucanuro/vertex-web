@@ -218,6 +218,9 @@
   /* Logos con versión clara/oscura (ProductLogo, ClientLogo): lo decide el data-theme más cercano */
   --show-logo-light: none;
   --show-logo-dark: inline-block;
+  /* Marcos de dispositivo */
+  --bezel: #1b2a42;
+  --bezel-ring: rgb(148 197 255 / 0.28);
 }
 
 /* Logos de producto/cliente claro-oscuro. Sin data-theme rige el valor oscuro de :root. */
@@ -316,11 +319,39 @@
   --logo-filter: grayscale(1);
   --show-logo-light: inline-block;
   --show-logo-dark: none;
+  --bezel: #101a2c;
+  --bezel-ring: rgb(15 42 69 / 0.2);
 }
 
 :root {
   --heading-stretch: 112%;
   --header-h: 4.5rem;
+
+  /* Espaciado vertical (todas las secciones y páginas usan estos tokens) */
+  --section-y: clamp(36px, 4.2vw, 60px); /* relleno por lado de una sección normal */
+  --section-y-lg: clamp(64px, 7vw, 104px); /* Hero (abajo), Philosophy, CTA final */
+  --section-y-sm: clamp(24px, 3vw, 40px); /* franja de clientes y bandas delgadas */
+  --heading-gap: clamp(28px, 3vw, 44px); /* entre SectionHeading y su contenido */
+  --card-gap: clamp(16px, 2vw, 24px); /* entre tarjetas */
+}
+
+/* ───────── Secciones ───────── */
+.section {
+  --py: var(--section-y);
+}
+.section--sm {
+  --py: var(--section-y-sm);
+}
+.section--lg {
+  --py: var(--section-y-lg);
+}
+.section-inner {
+  padding-block: var(--py);
+}
+/* Dos secciones seguidas con el mismo fondo: la segunda reduce su relleno superior a la mitad */
+.section--none + .section--none > .section-inner,
+.section--alt + .section--alt > .section-inner {
+  padding-top: calc(var(--py) / 2);
 }
 @media (min-width: 1024px) {
   :root {
@@ -459,7 +490,7 @@ html.theme-anim .glass {
 @keyframes reveal-in {
   from {
     opacity: 0;
-    transform: translateY(24px);
+    transform: translateY(var(--reveal-y, 24px));
   }
   to {
     opacity: 1;
@@ -477,7 +508,7 @@ html.theme-anim .glass {
 @supports not (animation-timeline: view()) {
   .reveal.reveal-hidden {
     opacity: 0;
-    transform: translateY(24px);
+    transform: translateY(var(--reveal-y, 24px));
   }
   .reveal.reveal-hidden.is-visible {
     opacity: 1;
@@ -516,4 +547,9 @@ html.theme-anim .glass {
   ::view-transition-new(*) {
     animation: none !important;
   }
+}
+
+/* Entrada más corta (12px) para capturas de pantalla */
+.reveal-sm {
+  --reveal-y: 12px;
 }

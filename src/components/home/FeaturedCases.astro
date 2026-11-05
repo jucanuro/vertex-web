@@ -19,7 +19,7 @@ const rows = [
   <Reveal>
     <SectionHeading eyebrow="Casos de éxito" title="Proyectos que ya están funcionando" />
   </Reveal>
-  <div class="mt-10 grid gap-6 lg:grid-cols-3">
+  <div class="mt-(--heading-gap) grid gap-(--card-gap) lg:grid-cols-3">
     {
       featured.map((c, i) => (
         <Reveal delay={i * 100} class="h-full">

@@ -2,6 +2,7 @@
 import Section from '../ui/Section.astro';
 import SectionHeading from '../ui/SectionHeading.astro';
 import Reveal from '../ui/Reveal.astro';
+import ScreenshotShowcase from '../ui/ScreenshotShowcase.astro';
 import { cases } from '../../data/cases';
 
 interface Props {
@@ -9,7 +10,9 @@ interface Props {
   showLink?: boolean;
 }
 const { showLink = true } = Astro.props;
-const stages = cases.find((c) => c.id === 'grupo-vicaf')?.stages ?? [];
+const vicaf = cases.find((c) => c.id === 'grupo-vicaf');
+const stages = vicaf?.stages ?? [];
+const limsIndex = stages.findIndex((s) => s.includes('LIMS'));
 const last = stages.length - 1;
 ---
 
@@ -18,19 +21,22 @@ const last = stages.length - 1;
     <SectionHeading eyebrow="Crecemos contigo" title="Empezamos por lo más urgente y crecemos por etapas" />
   </Reveal>
 
-  <ol class="stages mt-14" data-stages>
+  <ol class="stages mt-(--heading-gap)" data-stages>
     {
       stages.map((label, i) => (
         <li class:list={['stage', i === last && 'stage-next']} data-stage style={`--i:${i}`}>
           {i < last && <span class="seg" aria-hidden="true"><span class="fill" /></span>}
           <span class="node" aria-hidden="true"><span class="num">{i + 1}</span></span>
-          <span class="label">{i === last ? 'Tu siguiente etapa' : label}</span>
+          <div class="body">
+            <span class="label">{i === last ? 'Tu siguiente etapa' : label}</span>
+            {i === limsIndex && vicaf?.screenshots && <ScreenshotShowcase screenshots={vicaf.screenshots} name="Grupo VICAF" size="stage" class="stage-shot" />}
+          </div>
         </li>
       ))
     }
   </ol>
 
-  {showLink && <Reveal class="mt-12">
+  {showLink && <Reveal class="mt-(--heading-gap)">
     <p class="text-center text-text-muted">
       <a href="/crecemos-contigo/" class="font-semibold text-primary underline-offset-4 hover:underline">
         El caso de Grupo VICAF: de su web comercial a un sistema de operaciones de laboratorio. →
@@ -81,6 +87,13 @@ const last = stages.length - 1;
     border: 2px dashed var(--c-primary);
     box-shadow: none;
   }
+  .body {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    min-width: 0;
+    flex: 1;
+  }
   .label {
     padding-top: 0.5rem;
     font-weight: 600;
@@ -116,6 +129,11 @@ const last = stages.length - 1;
       text-align: center;
       padding-bottom: 0;
       gap: 1.25rem;
+    }
+    .body {
+      width: 100%;
+      align-items: center;
+      flex: none;
     }
     .label {
       padding: 0 0.5rem;

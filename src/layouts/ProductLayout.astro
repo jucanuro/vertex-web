@@ -10,8 +10,11 @@ import Badge from '../components/ui/Badge.astro';
 import Button from '../components/ui/Button.astro';
 import ProductLogo from '../components/brand/ProductLogo.astro';
 import Icon from '../components/ui/Icon.astro';
-import ImagePlaceholder from '../components/ui/ImagePlaceholder.astro';
+import ScreenshotShowcase from '../components/ui/ScreenshotShowcase.astro';
+import { getImage } from 'astro:assets';
+import { resolveScreenshots, shotConfig } from '../lib/screenshots';
 import { products, type Product } from '../data/products';
+import { hasProductLogo } from '../lib/product-logo';
 import { seo } from '../data/seo';
 import { company, whatsappLink } from '../data/company';
 
@@ -21,8 +24,21 @@ interface Props {
 const { id } = Astro.props;
 const p: Product = products[id];
 const meta = seo[p.slug as keyof typeof seo];
+const logoOk = hasProductLogo(p);
 const operating = id === 'qhalisys';
 const wa = whatsappLink(`Hola, quiero conocer ${p.name}`);
+
+// URLs absolutas de las versiones optimizadas (mayor ancho de cada captura, WebP)
+const shots = resolveScreenshots(p.screenshots);
+const screenshotUrls = await Promise.all(
+  shots.map(async (s) => {
+    const { widths, quality } = shotConfig[s.kind];
+    const img = await getImage({ src: s.image, width: widths[widths.length - 1], format: 'webp', quality });
+    return new URL(img.src, Astro.site).href;
+  }),
+);
+// Sección inferior: una captura distinta a la mejor ubicada del hero (cada una aparece 2 veces como máximo)
+const lower = id === 'qhalisys' ? [0] : [1];
 
 const jsonLd = {
   '@context': 'https://schema.org',
@@ -32,24 +48,26 @@ const jsonLd = {
   url: new URL(p.slug, Astro.site).href,
   logo: new URL(p.logo.light, Astro.site).href,
   provider: { '@type': 'Organization', name: company.name, url: Astro.site!.origin },
+  ...(screenshotUrls.length > 0 && { screenshot: screenshotUrls }),
 };
 ---
 
 <BaseLayout title={meta.title} description={meta.description} jsonLd={jsonLd}>
   <PageHero
     eyebrow="Plataforma propia"
-    title={`${p.name}: ${id === 'qhalisys' ? 'el sistema para tu farmacia' : 'reserva tu cancha en línea'}`}
-    highlight={p.name}
-    subtitle={p.description}
+    title={logoOk ? p.tagline : `${p.name}: ${p.tagline}`}
+    srTitlePrefix={logoOk ? `${p.name}: ` : undefined}
+    subtitle={p.body}
     breadcrumbs={[{ label: 'Servicios', href: '/servicios/' }, { label: 'Vertex Platforms', href: '/servicios/sistemas-saas/' }, { label: p.name, icon: p.icon }]}
   >
-    <ProductLogo slot="logo" product={id} variant="full" height={64} eager />
+    <Fragment slot="logo">{logoOk && <ProductLogo product={id} variant="full" class="product-hero-logo" eager />}</Fragment>
     {operating && <Badge>En operación</Badge>}
     <Button href={wa} variant="primary" size="lg" target="_blank" rel="noopener noreferrer">Escríbenos por WhatsApp</Button>
+    <ScreenshotShowcase slot="visual" screenshots={p.screenshots} name={p.name} size="large" eager class="mt-6" />
   </PageHero>
 
   <Section bg="none">
-    <div class="grid gap-6 md:grid-cols-2">
+    <div class="grid gap-(--card-gap) md:grid-cols-2">
       <Reveal class="h-full">
         <GlassCard as="div" class="flex h-full flex-col gap-3">
           <h2 class="text-h3">Para quién es</h2>
@@ -68,7 +86,7 @@ const jsonLd = {
 
   <Section bg="alt">
     <Reveal><SectionHeading eyebrow={p.name} title="Funciones" /></Reveal>
-    <ul class="mt-10 grid gap-4 sm:grid-cols-2">
+    <ul class="mt-(--heading-gap) grid gap-(--card-gap) sm:grid-cols-2">
       {
         p.features.map((f, i) => (
           <li>
@@ -85,8 +103,15 @@ const jsonLd = {
   </Section>
 
   <Section bg="none">
-    <Reveal><ImagePlaceholder ratio="16 / 9" label={`Espacio para captura: ${p.name}`} /></Reveal>
+    <ScreenshotShowcase screenshots={p.screenshots} name={p.name} size="default" only={lower} decorative />
   </Section>
 
   <CTABlock audience="negocios" title={`¿Quieres conocer ${p.name}? Escríbenos.`} text="Te respondemos por WhatsApp." whatsapp={wa} />
 </BaseLayout>
+
+<style is:global>
+  .product-hero-logo {
+    height: clamp(56px, 7vw, 72px);
+    width: auto;
+  }
+</style>

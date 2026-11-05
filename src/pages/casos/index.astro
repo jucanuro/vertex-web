@@ -40,7 +40,7 @@ const filterCss = filterIds
           ))
         }
       </fieldset>
-      <ul class="grid gap-6 md:grid-cols-2 lg:grid-cols-3" aria-live="polite">
+      <ul class="grid gap-(--card-gap) md:grid-cols-2 lg:grid-cols-3" aria-live="polite">
         {cases.map((c) => <li data-services={c.services.join(' ')}><CaseCard item={c} as="div" /></li>)}
       </ul>
     </div>
@@ -55,7 +55,7 @@ const filterCss = filterIds
     display: flex;
     flex-wrap: wrap;
     gap: 0.5rem;
-    margin-bottom: 2rem;
+    margin-bottom: var(--card-gap);
     border: 0;
     padding: 0;
   }

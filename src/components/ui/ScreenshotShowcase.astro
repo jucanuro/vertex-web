@@ -1,0 +1,126 @@
+---
+import DeviceFrame from './DeviceFrame.astro';
+import ImagePlaceholder from './ImagePlaceholder.astro';
+import Reveal from './Reveal.astro';
+import { resolveScreenshots } from '../../lib/screenshots';
+import type { Screenshot } from '../../data/products';
+
+interface Props {
+  screenshots?: Screenshot[];
+  /** Nombre del producto: texto de adorno del navegador y del marcador */
+  name: string;
+  /** large: hero de producto · default: bloques · compact: tarjetas y fichas · stage: línea de etapas (máx. 360px) */
+  size?: 'large' | 'default' | 'compact' | 'stage';
+  /** La primera imagen está en la primera pantalla visible */
+  eager?: boolean;
+  /** Índices a mostrar (para no repetir la misma captura en una página) */
+  only?: number[];
+  /** Captura repetida en la misma página: alt vacío */
+  decorative?: boolean;
+  class?: string;
+}
+const { screenshots, name, size = 'default', eager = false, only, decorative = false, class: className } = Astro.props;
+const all = resolveScreenshots(screenshots).map((s) => (decorative ? { ...s, alt: '' } : s));
+const shots = only ? only.map((i) => all[i]).filter(Boolean) : all;
+const desktop = shots.find((s) => s.kind === 'desktop');
+const phones = shots.filter((s) => s.kind === 'mobile');
+// Escena según lo que exista
+const scene = desktop && phones.length ? 'combo' : desktop ? 'browser' : phones.length >= 2 ? 'pair' : phones.length === 1 ? 'phone' : 'none';
+const label = name.toLowerCase();
+// sizes = ancho aproximado de pintado en cada punto de corte
+const browserSizes = size === 'large' ? '(min-width: 1264px) 1000px, calc(100vw - 40px)' : size === 'stage' ? '(min-width: 768px) 360px, 100vw' : '(min-width: 1264px) 560px, (min-width: 1024px) 45vw, calc(100vw - 40px)';
+---
+
+{
+  scene === 'none' ? (
+    <Reveal class="reveal-sm"><ImagePlaceholder ratio="16 / 10" label={`Espacio para captura: ${name}`} class={className} /></Reveal>
+  ) : (
+    <Reveal class="reveal-sm">
+      <div class:list={['showcase', `showcase-${scene}`, `size-${size}`, className]}>
+        {scene === 'browser' && <DeviceFrame variant="browser" image={desktop!.image} alt={desktop!.alt} label={label} eager={eager} sizes={browserSizes} />}
+        {
+          scene === 'combo' && (
+            <>
+              <DeviceFrame variant="browser" image={desktop!.image} alt={desktop!.alt} label={label} eager={eager} sizes={browserSizes} />
+              <DeviceFrame variant="phone" image={phones[0].image} alt={phones[0].alt} class="combo-phone" sizes="(min-width: 1024px) 260px, 30vw" />
+            </>
+          )
+        }
+        {scene === 'phone' && <DeviceFrame variant="phone" image={phones[0].image} alt={phones[0].alt} eager={eager} sizes="(min-width: 768px) 280px, 70vw" />}
+        {
+          scene === 'pair' && (
+            <>
+              <DeviceFrame variant="phone" image={phones[0].image} alt={phones[0].alt} eager={eager} sizes="(min-width: 768px) 280px, 45vw" />
+              <DeviceFrame variant="phone" image={phones[1].image} alt={phones[1].alt} class="pair-second" sizes="(min-width: 768px) 280px, 45vw" />
+            </>
+          )
+        }
+      </div>
+    </Reveal>
+  )
+}
+
+<style>
+  .showcase {
+    position: relative;
+    margin-inline: auto;
+    width: 100%;
+  }
+  .size-large {
+    max-width: 1000px;
+  }
+  .size-default {
+    max-width: 640px;
+  }
+  .size-compact {
+    max-width: 520px;
+  }
+  .size-stage {
+    max-width: 360px;
+  }
+
+  /* Navegador + celular superpuesto: el celular mide 28% del conjunto y sobresale 15% de sí mismo
+     por abajo y por la derecha; el padding reserva ese espacio para no crear scroll horizontal. */
+  .showcase-combo {
+    padding-right: 4.2%;
+    padding-bottom: 9.5%;
+  }
+  .showcase-combo :global(.combo-phone) {
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    width: 28%;
+    transform: translate(15%, 15%);
+  }
+
+  /* Un celular solo */
+  .showcase-phone {
+    max-width: 260px;
+  }
+
+  /* Dos celulares lado a lado; el segundo más bajo (24px) y, en escritorio, girado 3° */
+  .showcase-pair {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+    padding-bottom: 24px;
+    max-width: 480px;
+  }
+  .size-compact.showcase-pair {
+    max-width: 400px;
+  }
+  .showcase-pair :global(.pair-second) {
+    transform: translateY(24px);
+  }
+  @media (min-width: 768px) {
+    .showcase-pair {
+      gap: 1.5rem;
+      padding-inline: 0.75rem;
+    }
+  }
+  @media (min-width: 768px) and (prefers-reduced-motion: no-preference) {
+    .showcase-pair :global(.pair-second) {
+      transform: translateY(24px) rotate(3deg);
+    }
+  }
+</style>

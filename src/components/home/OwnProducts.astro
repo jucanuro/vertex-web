@@ -3,9 +3,10 @@ import Section from '../ui/Section.astro';
 import SectionHeading from '../ui/SectionHeading.astro';
 import Reveal from '../ui/Reveal.astro';
 import Badge from '../ui/Badge.astro';
-import ImagePlaceholder from '../ui/ImagePlaceholder.astro';
+import ScreenshotShowcase from '../ui/ScreenshotShowcase.astro';
 import ProductLogo from '../brand/ProductLogo.astro';
 import { products } from '../../data/products';
+import { hasProductLogo } from '../../lib/product-logo';
 
 const items = [
   { id: 'qhalisys' as const, p: products.qhalisys, badge: 'En operación' },
@@ -17,28 +18,35 @@ const items = [
   <Reveal>
     <SectionHeading eyebrow="Productos propios" title="Plataformas que creamos y operamos" />
   </Reveal>
-  <div class="mt-12 flex flex-col gap-16 lg:gap-24">
+  <div class="mt-(--heading-gap) flex flex-col gap-(--section-y)">
     {
       items.map(({ id, p, badge }, i) => (
         <div class="grid items-center gap-8 lg:grid-cols-2 lg:gap-14">
           <Reveal class:list={[i % 2 === 1 && 'lg:order-2']}>
             <div class="flex flex-col items-start gap-4">
-              <ProductLogo product={id} variant="full" height={52} />
-              <div class="flex flex-wrap items-center gap-3">
-                <h3 class="text-h2">{p.name}</h3>
+              <div class="flex flex-col items-start gap-3 sm:flex-row sm:items-center sm:gap-4">
+                {hasProductLogo(p) && <ProductLogo product={id} variant="full" class="product-block-logo" />}
                 {badge && <Badge>{badge}</Badge>}
               </div>
-              <p class="text-text-muted">{p.description}</p>
+              <h3 class={hasProductLogo(p) ? 'sr-only' : 'text-h2'}>{p.name}</h3>
+              <p class="text-h3 text-text" style="font-family:var(--font-display);font-weight:700">{p.tagline}</p>
+              <p class="text-text-muted">{p.body}</p>
               <a href={p.slug} class="font-semibold text-primary underline-offset-4 hover:underline" aria-label={`Conocer ${p.name}`}>
                 Conocer {p.name} →
               </a>
             </div>
           </Reveal>
-          <Reveal delay={100}>
-            <ImagePlaceholder ratio="16 / 10" label={`Espacio para captura: ${p.name}`} />
-          </Reveal>
+          <ScreenshotShowcase screenshots={p.screenshots} name={p.name} size="default" />
         </div>
       ))
     }
   </div>
 </Section>
+
+<style>
+  /* Logo como identidad del bloque: 48–56px en móvil, 56–72px en escritorio */
+  :global(.product-block-logo) {
+    height: clamp(48px, 6vw, 72px);
+    width: auto;
+  }
+</style>
